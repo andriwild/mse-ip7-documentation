@@ -74,8 +74,8 @@
 
   set text(
     font: body-font, 
-    size: 12pt, 
-    lang: "en"
+    size: 11pt, 
+    lang: "de"
   )
   
   show math.equation: set text(weight: 400)
@@ -110,7 +110,7 @@
   // --- Table of Contents ---
   outline(
     title: {
-      text(font: body-font, 1.5em, weight: 700, "Contents")
+      text(font: body-font, 1.5em, weight: 700, "Inhaltsverzeichnis")
       v(15mm)
     },
     indent: 2em
@@ -128,7 +128,7 @@
 
   // List of figures.
   pagebreak()
-  heading(numbering: none)[List of Figures]
+  heading(numbering: none)[Abbildungsverzeichnis]
   outline(
     title:"",
     target: figure.where(kind: image),
@@ -136,7 +136,7 @@
 
   // List of tables.
   pagebreak()
-  heading(numbering: none)[List of Tables]
+  heading(numbering: none)[Tabellenverzeichnis]
   outline(
     title: "",
     target: figure.where(kind: table)

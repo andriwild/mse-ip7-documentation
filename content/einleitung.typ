@@ -39,5 +39,10 @@ Dank der fortschreitenden Entwicklung von Edge-Computing-Hardware sind auf Machi
 (Viele neue Hardware im Bereich ML on Edge)
 ]
 
+== Abgrenzung
+#TODO[
+    Kein ML Training
+]
+
 == Aufbau des Berichts
 Der Bericht besteht im wesentlichen aus vier Teilen. Im ersten teill werden die grundlagen vermittelt, welche relevant sind für das Verständnis des Berichts. Anschliessend folgt die Analyse, welche die Zielgruppen und Anforderungen definiert. In der Umsetzung wird die konkrete Umsetzung des Projekts beschrieben und abschliessend wird die Evaluation der Resultate vorgenommen.
