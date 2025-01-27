@@ -113,8 +113,8 @@ NCNN @ni_ncnn_2017 ist eine high performance computing platform für mobile Endg
 ==== Hailo
 Hailo, gegründet im Jahr 2017, hat sich als führendes Unternehmen im Bereich leistungsfähiger KI-Prozessoren für Edge-Anwendungen etabliert. Mit ihrer eigens entwickelten Hardware-Architektur verfolgt Hailo das Ziel, Machine Learning auch ausserhalb von Rechenzentren zugänglich und effizient nutzbar zu machen @noauthor_fuhrende_nodate. Die Nutzung der Hailo-Chips erfordert eine Konvertierung der Modelle, wofür das Unternehmen eine umfassende Software-Suite bereitstellt. Diese Suite enthält alle notwendigen Werkzeuge, um Modelle auf die spezifischen Anforderungen der Hailo-Hardware abzustimmen.
 
-- Vorteil: Ermöglicht sehr schnelle Inferenzen und Hailo bietet eine gute Dokumentation und  ein grosses Ökosystem
-- Nachteil: Eine Intensive Einarbeitung ist notwendig und der konvertierungsprozess erfordert Modulspezifisches Wissen
+- Vorteile: Ermöglicht sehr schnelle Inferenzen und Hailo bietet eine gute Dokumentation und  ein grosses Ökosystem
+- Nachteile: Eine Intensive Einarbeitung ist notwendig und der konvertierungsprozess erfordert Modulspezifisches Wissen..
 
 
 ==== Ultralytics
