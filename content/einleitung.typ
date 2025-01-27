@@ -34,15 +34,10 @@ Dank der fortschreitenden Entwicklung von Edge-Computing-Hardware sind auf Machi
 - Was sind Anforderungen an eine ML-Kamera für typische Citizen Science Anwendungen im Bereich Biodiversitätsmonitoring?
 - Wie sieht eine konkrete Edge ML Kamera aus, für Monitoring von Biodiversität, wie im Projekt SNF Mitwelten angewendet?
 
-== Stand der Forschung
-#TODO[
-(Viele neue Hardware im Bereich ML on Edge)
-]
-
 == Abgrenzung
-#TODO[
-    Kein ML Training
-]
+Ein System zur Analyse der Biodiversität mittels Machine Learning beinhaltet viele verschiedene Stellschrauben. 
+In diesem Projekt liegt der Fokus auf der aktuellsten Hardware und wie diese für Edge ML eingesetzt werden kann. Nicht Teil dieses Projekt ist das Trainieren von Modellen. 
+
 
 == Aufbau des Berichts
 Der Bericht besteht im wesentlichen aus vier Teilen. Im ersten teill werden die grundlagen vermittelt, welche relevant sind für das Verständnis des Berichts. Anschliessend folgt die Analyse, welche die Zielgruppen und Anforderungen definiert. In der Umsetzung wird die konkrete Umsetzung des Projekts beschrieben und abschliessend wird die Evaluation der Resultate vorgenommen.
