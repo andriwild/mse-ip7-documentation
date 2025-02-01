@@ -56,8 +56,6 @@
 
   //print_page_break(print: is_print)
   
-  acknowledgement_layout(acknowledgement)
-
   print_page_break(print: is_print)
 
   abstract(lang: "en")[#abstract_en]
@@ -88,7 +86,7 @@
   show ref: it => {
     let el = it.element
     if el != none and el.func() == heading and el.level == 1 {
-      [Chapter ]
+      [Kapitel ]
       numbering(
         el.numbering,
         ..counter(heading).at(el.location())

@@ -4,9 +4,6 @@
 #pagebreak()
 
 = Umsetzung 
-#TODO[
-    (Was ich tatsächlich Umgesetzt habe)
-]
 Dieses Kapitel beschreibt die Umsetzung einer Software zum Betreiben einer Machine Learning Pipeline. Das System umfasst die Erfassung von Bildern, ausführen einer Machine Learning Analyse und der Weiterverarbeitung deren Resultate.
 Die Einwicklung erfolgte drei Iterationen, bei welchen jeweils die erstellte Architektur reflektiert und anhand der gewünschten Qualitäten angepasst wurden.
 
@@ -14,6 +11,7 @@ Die Einwicklung erfolgte drei Iterationen, bei welchen jeweils die erstellte Arc
 #TODO[
     - Qualitäten (Erweiterbarkeit, Robustheit, Self-contained, Einfachheit)
     - Modularisierung (Komponenten: Cam, ML Framework)
+    - Verworfene Ansätze
 ]
 Damit das System Citizen Science fähig ist, muss es möglichst leicht für neue Szenarien anpassbar sein. Bei den auswechselbaren Komponenten handelst es sich um: 
 Die Quelle zum erfassen von Bildern mit einem Buffer, die Analyse der einzelnen Bilder und die Verarbeitung der Analysedaten. Diese drei Komponenten müssen ohne Anpassung von bestehendem Code auswechselbar sein, um die Komplexität für das betreibende Projektteam gering zu halten. Da ein Machine Learning Modell sehr individuell ist, verunmöglicht es eine generelle Implementierung einer Pipeline für verschiedene Modelle.
@@ -80,11 +78,9 @@ Jede Komponente hat die folgenden Werte, die definiert sein müssen:
 Auf diese Weise lassen sich unabhängig vom Rest der Software Klassen definieren und in die Pipeline einbinden.
 
 == Software Design 
-#TODO[
-(Aufteilung in Klassen)
-    - Klassen Diagramm
-    - Sequenz Diagramm
-]
+
+#TODO[Referenz auf Buch]
+
 In diesem Abschnitt wird aufgezeigt, wie die einzelnen Komponente mit einander kommunizieren.
 Zu diesem Zweck ist folgend ein Klassen Diagramm mit den relevanten Elementen darstellt. Die zentrale Komponente stellt die Klasse Pipeline dar. Diese hat eine Beziehung zu der Source, Operation und Sink und orchestriert den Datenfluss zwischen den Komponenten. Mit der Applikation wird auch ein Konfiguration Server gestartet. Mittels setter-Methoden auf der Pipeline lassen sich die Austauschbaren Komponenten konfigurieren. Der Konfigurations-Server liefert ein simples index.html File aus, welches die Optionen aus dem Konfigurationsfile anzeigt. Durch Auswählen und Bestätigen gelangt die Information an den Server zurück, worauf die Pipeline angepasst wird.
 
@@ -132,30 +128,113 @@ Die Pipeline ist dafür verantwortlich, dass ein Thread zur Erfassung von Bilder
 
 
 == Prototypen: verschiedene System Setups 
-#TODO[
-    (welche Konfiguration wurde verwendet)
-    - Prototyp 1 
-    - Prototyp 2
-    - FPS und andere Metriken
-]
-Der folgende Abschnitt beschreibt verschiedene Setups, welche für den Einsatz der Mitwelten Analyse möglich wären. Alle Ansätze erfüllen die nötigen Anforderungen.
-(nicht nur MW)
+In diesem Kapitel werden zwei unterschiedliche Prototypen vorgestellt, die verschiedene System-Setups für die Anwendung der entwickelten Applikation demonstrieren. Beide Prototypen setzen Machine Learning auf dem Raspberry Pi 5 ein, unterscheiden sich jedoch in ihrer verwendeten Hardware und Konfiguration. Durch den Vergleich dieser Setups lassen sich die Vor- und Nachteile verschiedener Ansätze analysieren und bewerten. 
 
-=== Prototyp 1
-#TODO[
-    - Mitwelten Analyse auf CPU, ONNX Model, nicht NCNN weil kein export suport
-]
-=== Prototyp 2
-#TODO[
-    - Mitwelten Analyse auf edge TPU
-]
+=== Prototyp 1 - Mitwelten Analyse<prototyp_1>
+#TODO[Auslastung]
 
-=== Prototyp 3
+Dieser Prototyp setzt den Referenz Use Case aus @referenz_use_case mit verschiedenen Modellen um.
+Die Analysen wurden jeweils mit Testbildern durchgeführt, daher ist der Energieverbrauch ohne Kamera zu betrachten.
+Die folgenden @mw_analyse_comp zeigt die Beziehung zwischen Anzahl Blumen auf einem Bild und der Zeit für die Bestäuber Analyse.
+Die angegebene Zeit beinhaltet die Detektierung der Blüten sowie die Detektierung von Bestäuber auf jeder detektierten Blüte.
+
+#figure(
+  image("../figures/mw_analyse_comp.png", width: 100%),
+    caption: [Mitwelten Analyse - Vergleich\
+    (Quelle: Screenshot eigene Darstellung, Andri Wild, 2025)
+]
+)<mw_analyse_comp>
+
+Aus @mw_analyse_comp geht hervor, dass alle drei Pipelines die zeitlichen Anforderungen erfüllen.
+Dabei ist auch ersichtlich, dass sich die Ergebnisse aus @analyse wiederspiegeln.
+
+==== ONNX
+Die Analyse hat gezeigt, dass die Ausführung der Modelle im ONNX Format schon eine beträchtliche Zeiteinsparung pro Inferenz zur Folge hat. Zu diesem Zweck sind die Mitwelten Modelle mittels Ultralytics export Funktion in das ONNX Format konvertiert worden. Aus @mw_analyse_comp ist ersichtlich, dass der Zeitbedarf der Mitwelten Analyse im Bereich des akzeptierbaren liegt.  Der Energieverbrauch liegt bei rund 10W.
+Durch den linearen zusammenhang zwischen Anzahl Blumen und Inferenzzeit können wir die maximale Anzahl Blumen ermittlen, welche innerhalb der 15 Sekunden berechenbar sind.
+Mit den Datenpunkten: $4 "Blumen" ,2.051 s$ und $27 "Blumen" ,12.168 s$ lässt sich für 15 Sekunden rund 33 Blumen analysieren.
+
+$ m = (y_2 - y_1) / (x_2 - x_1) = (27 - 4) / (12.168s- 2.051s)  = 2.275 $
+$ b = y_1 - (m * x_1) = 4 - (2.275 * 2.051s) = -0.66 $
+$ y = m * x + b  = 2.275 * 15 -0.66 = 33.465 $ 
+
+
+==== NCNN
+Aus @analyse ist zu erwarten, dass die Umsetzung der Mitwelten Analyse mit NCNN Modellen nochmals deutlich schneller wird. Dies zeigt auch die Umsetzung dieses Prototyp. Der Zeitbedarf entspricht etwa der Hälfte von der Umsetzung mit ONNX Modellen, während der Energiebedarf mit rund 10W etwa gleich bleibt. \
+Die Konvertierung des Bestäuber Modells in das NCNN Format verursachte einige Schwierigkeiten. Folglich wurde das Yolov8n als alternative trainiert und verwendet. Die Yolov8 Generation ist eine Weiterentwicklung der Yolov5 Modelle. Das Yolov8n (nano) Modell ist von der Geschwindigkeit vergleichbar mit dem Yolov5s (small), welches für die Bestäuberanalyse verwendet wurde @ultralytics_yolov5_nodate-1. Allerdings soll an dieser Stelle erwähnt sein, dass das ursprüngliche Model mit einer grösse von 480x480 trainiert worden ist. Dies wurde bei der adaptierung auf Yolov8 nicht berücksichtigt, somit dürfte sich die Inferenz Dauer in einem ähnlichen Bereich bewegen.
+Die Berechnung, wie viele Blüten in 15 Sekunden analysiert werden könnten ergab in diesem Fall 
+Durch Einsetzen der Datenpunke: 27 Blüten in 6.11 Sekunden und 4 Blüten in 1.179 Sekunden, erhalten wir das Resultat von 68.47 Blüten, welche in 15 Sekunden analysiert werden könnten.
+
+==== Hailo
+Eine weitere Implementierung wurde mit der Beschleuniger Hardware von Hailo umgesetzt.
+Um Modelle auf dieser Hardware auszuführen, müssen diese in das hef Format konvertiert werden.
+Dies erreicht man mit der vom Hersteller zur Verfügung gestellten Software Suite @noauthor_software_nodate.
+Diese beinhaltet im wesentlichen einen parser, optimierer und compiler. Diese Prozesse müssen 
+für jedes Modell richtig konfiguriert werden. Dafür ist die Untersuchung des zu konvertierenden Modells unerlässlich.
+Der folgende Befehl in @hailo_compiler_cmd zeigt beispielhaft, wie ein kompilierungs Prozess ausgeführt werden kann.
+
+#figure(
+```bash
+hailomz compile \
+    --hw-arch hailo8l \
+    --yaml ./hailo_model_zoo/hailo_model_zoo/cfg/networks/yolov8n.yaml \
+    --ckpt /local/shared_with_docker/yolov8n_pollinator_ep50_v1.onnx \
+    --classes 5 \
+    --end-node-names /model.22/cv2.0/cv2.0.2/Conv /model.22/cv3.0/cv3.0.2/Conv /model.22/cv2.1/cv2.1.2/Conv /model.22/cv3.1/cv3.1.2/Conv /model.22/cv2.2/cv2.2.2/Conv /model.22/cv3.2/cv3.2.2/Conv \
+    --calib-path /local/shared_with_docker/pollinators/
+```,
+    caption: [Hailo Konvertierung]
+)<hailo_compiler_cmd>
+
+Speziell für die end-node-names muss das Model mit einem Tool wie netron.app untersucht werden damit diese gefunden werden können.
+Ebenso können Anpassungen im yaml file, welches mit dem Flag --yaml angegeben wird nötig sein. Dieses yaml file definiert weitere Parameter zur Beschreibung des Modells.
+Zusätzlich wird ein .alls file geladen, welches verwendet wird, um den Output Node richtig zu konfigurieren. Auch dieses File verweist noch auf ein postprocessing config file, welches die end-nodes nach dem parsing process definiert. Diese müssen je nach Modell auch angepasst werden. Die verschiendenen Konfigurationsfiles werden von Hailo in ihrem eigenen Model Zoo zur Verfügung gestellt @noauthor_hailo_model_zoohailo_model_zoocfg_nodate.
+Um die Nodes nach dem parsing zu finden stellt Hailo ein profiler zur Verfügung. Folgende @hailo_profiler zeigt ein Screenshot des Hailo Profiler Interfaces. Der Ausschnitt zeigt einige Nodes eines Yolov8n Modells.
+
+#figure(
+  image("../figures/hailo_profiler.png", width: 100%),
+    caption: [Teil eines Hailo Model Graph Yolov8n\
+    (Quelle: Screenshot Hailo Profiler, Andri Wild, 2025)
+]
+)<hailo_profiler>
+
+Weil dieser Prozess für die bestehenden Yolov5 Modelle nicht erfolgreich war, kamen an dieser Stelle neu trainierte Yolov8 Modelle zum Einsatz.
+Das Trainig der Modelle lag an dieser Stelle nicht Fokus, daher weisen diese nicht die gleiche Präzision auf, wie die Yolov5 Modelle. Dies ist auch der Grund, dass die @mw_analyse_comp weniger Blüten bei der Hailo Pipeline hat.
+Die Analyse der Inferenzzeiten für die Beustäuber Analyse zeigt beeindruckende Resultate. Auch mit vielen Blüten ist die Performance sehr gut. Die Gesamtzeit der Inferenz von 13 Blüten dauert rund 20ms.
+Des weiteren ist auch der Energiebedarf bei rund 5W, was der Hälfte der CPU betriebenen Pipelines entspricht.
+
+
+=== Prototyp 2 - AI-Camera
 #TODO[
     - AI-Camera Setup
 ]
+Der zweite Prototyp verwendet die AI-Camera. Um eigens trainierte Modelle auf der AI-Camera auszuführen, müssen diese für den Sony IMX500 Chip konvertiert werden @noauthor_imx500_nodate. Dieser Prozess ist nicht trivial und konnte im Kontext dieser Arbeit nicht mehr erarbeitet werden.
+Trotzdem soll an dieser Stelle ein Use Case mit dieser Hardware vorgestellt werden.
+Eine besondere Eigenschaft der AI-Camera ist, dass diese zugleich mit dem Bild die Inerenzresultate liefert. Dies hat zur Folge, dass das Host System praktisch unbelastet ist. Dies ermöglicht das abarbeiten von anderen Tasks durch die freie Rechenleistung oder das Verwenden von weniger Leistungsfähiger Hardware.
 
-=== Prototyp 4
-#TODO[
-    - Hailo Object Detection
+Erwähnenswert ist in diesem Setup die Konfiguration. Das @config_ai_cam zeigt, dass die AI-Kamera sowohl als `source`  als auch als `pipe` definiert ist.
+
+#figure(
+```yaml
+sources:
+  - name: AI-Camera 
+    file_path: ./source/impl/aiCamera.py
+    class_name: AiCamera
+    parameters:
+      width: 640
+      height: 640 
+pipes:
+  - name: AI-Camera
+    file_path: ./source/impl/aiCamera.py
+    class_name: AiCamera
+sinks:
+  - name: console
+    class_name: Console
+    file_path: ./sink/impl/console.py
+```
+  ,
+    caption: [Konfiguration AI-Kamera\
 ]
+)<config_ai_cam>
+
+Durch die Modularität der Applikation erhält hier die AI-Kamera eine Doppelrolle. Effektiv existiert in der Applikation nur eine Instanz der Klasse `AiCamera`. Die Applikation sorgt beim Laden der Klassen dafür, dass dies sichergestellt ist.
+

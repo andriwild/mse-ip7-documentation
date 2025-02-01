@@ -15,7 +15,7 @@
   submissionDate: submissionDate,
   abstract_en: include "/content/abstract_en.typ",
   abstract_de: include "/content/abstract_de.typ",
-  acknowledgement: include "/content/acknowledgement.typ",
+  //cknowledgement: include "/content/acknowledgement.typ",
 )
 
 #include "/content/einleitung.typ"

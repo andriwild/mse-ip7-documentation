@@ -1,11 +1,7 @@
 #import "/utils/todo.typ": TODO
 #pagebreak()
-#TODO[RPi5 mit 16GB wäre verfügbar]
 
 = Grundlagen 
-#TODO[
-(Dinge die man auf wikipedia lesen kann, was ist schon hier, die Dinge, die ich nachher brauche)
-]
 Dieses Kapitel beschreibt den Theoretischen Inhalt dieser Arbeit. Um die späteren Analysen und Evaluationen verstehen zu können, werden die grundlegenden Konzepte, Technologien und Frameworks vorgestellt, die in diesem Projekt verwendet werden. Dazu gehören die Prinzipien des Machine Learnings, die Rolle von Edge Computing sowie die eingesetzten Hardware- und Softwarekomponenten. Ebenso werden relevante Metriken und Methoden erläutert, die zur Bewertung der entwickelten Systeme herangezogen werden.
 
 == Citizen Science
@@ -14,6 +10,7 @@ Dieses Kapitel beschreibt den Theoretischen Inhalt dieser Arbeit. Um die später
     - Motivation (Warum machen Leute mit?)
     - Warum ist es wichtig / notwendig?
 ]
+Das grundlegende Ziel dieser Arbeit ist die Entwicklung eines Systems, welches im Bereich von Citizen Science eingesetzt werden kann. Daher soll als erstes der Begriff erläutert werden.
 Eine treffende Definition von Citizen Science liefert das Grünbuch Citizen Science Strategie 2020 für Deutschland:
 #set quote(block: true)
 #show quote: set align(center)
@@ -33,25 +30,22 @@ Das Buch The Science of Citizen Science @vohland_science_2021[p~283] diskutiert 
   ],
 )
 
-Aus der illustration geht hervor, dass verschiedenste Aspekte die Bürgerinnen und Bürger zu einer aktiven Beteiligung motivieren kann. Nebst den Fachlichen sind auch Soziale Aspekte von Bedeutung. 
-Auf der anderen Seite provitieren auch die Projekt initianten. Die Organiation und Zusammenarbeit mit Aussenstehenden kann eine spannende  Aufgabe sein. 
+Aus der illustration geht hervor, dass verschiedenste Aspekte die Bürgerinnen und Bürger zu einer aktiven Beteiligung motivieren kann. Nebst den Fachlichen sind auch Soziale Themen von Bedeutung. 
+
+Auf der anderen Seite profitieren auch die Projekt Initianten. Die Organisation und Zusammenarbeit mit Aussenstehenden kann eine spannende Aufgabe sein. Es stellt die Projekt verantwortlichen vor neue Herausforderungen um die Freiwilligen motivierend in das Projekt miteinzubeziehen. Ein Grundstein dieser Angelegenheit ist die Zugänglichkeit zu Projekt Instrumenten. In Bezug auf ein Projekt mit Edge ML kann es besonders wichtig sein, dass die Freiwilligen verstehen wie das Setup und die damit verbundene Technik funktioniert und damit die Faszination entfacht.
 
 
 == Biodiversität Monitoring
-#TODO[
-    (Timeo's Arbeit zitieren - nicht das selbe machen)
-    - Sinn und Zweck
-    - Mögliche Anwendungszwecke / Szenarien / Perspektiven
-    - Mitwelten Pipeline (Von der Kamera zu den Daten)
-]
-Biodiversitäts Monitoring befasst sich grundsätzlich mit dem Beobachten und Analysieren von Tier - und Pflanzenwelt.
+
+Biodiversität Monitoring befasst sich grundsätzlich mit dem Beobachten und Analysieren von Tier - und Pflanzenwelt.
 
 #quote(attribution:  <bdm_verlassliche_nodate>)["Die biologische Vielfalt bildet eine Lebensgrundlage der Schweiz. Deshalb ist es wichtig, ihren Zustand und ihre Entwicklung zu kennen."]
 Aus diesem Grund ist es von grosser Bedeutung die Umwelt zu beobachten und Veränderungen festzustellen. Um diese Arbeit zu vereinfachen, sind automatisierte Lösungen für ein Monitoring gefragt. 
 
 Ein System zur automatisierten Datenerfassung wurde im Rahmen des Projekts Mitwelten entwickelt @wullschleger_data_nodate @wullschleger_automated_nodate. Hierfür wurden verschiedene Sensoren zu einem IoT-Toolkit kombiniert. Dieses Toolkit ermöglicht es, Daten von dezentralen Systemen zu erfassen und an ein zentrales Backend weiterzuleiten.
 
-Das IoT-Toolkit umfasst unter anderem eine Kamera, die in regelmässigen Abständen Fotos von Blumentöpfen aufnimmt. Im Rahmen des Projekts wurden so insgesamt 1,5 Millionen Bilder generiert. Abbildung @pollinator_cam zeigt eine im Feld aufgestellte Kamera.
+
+Das IoT-Toolkit umfasst unter anderem eine Kamera, die in regelmässigen Abständen Fotos von Blüten aufnimmt. Im Rahmen des Projekts wurden so insgesamt 1,5 Millionen Bilder generiert. @pollinator_cam zeigt eine im Feld aufgestellte IoT-Kamera.
 
 #figure(
   image("../figures/pollinator_cam.jpg", width: 50%),
@@ -62,24 +56,39 @@ Das IoT-Toolkit umfasst unter anderem eine Kamera, die in regelmässigen Abstän
 )<pollinator_cam>
 
 Die enorme Menge an Bilddaten lässt sich nicht manuell analysieren. Deshalb entwickelte das Projekt-Team eine Machine-Learning-Pipeline, die Bestäuber automatisch erkennt.
-Die technische Architektur des Systems verbindet die Kamera mit einem leistungsstarken Backend. Die Kamera, bestehend aus einem Raspberry Pi und einer angeschlossenen Kameraeinheit, erfasst die Bilder und überträgt diese über einen Access Point an das Backend. Auf dem Server führt eine Machine-Learning-Pipeline die Analyse der empfangenen Bilder durch, um Bestäuber zu erkennen.
-Im Kontext dieser Entwicklung wurden ebenfalls alternative Architekturen untersucht. Under anderem ein System, auf dem die Machine-Learning-Pipeline auf einem Raspberry Pi 3 ausgeführt wurde. Aufgrund der zu langen Analysezeiten wurde jedoch ein Server basierter Ansatz gewählt.
+Die technische Architektur des Systems verbindet die Kamera mit einem leistungsstarken Backend. Die Kamera, bestehend aus einem Raspberry Pi und einer angeschlossenen Kameraeinheit, erfasst die Bilder und überträgt diese über einen Access Point an das Backend. Auf dem Backend Server läuft eine Machine Learning Pipeline, welche die empfangenen Bildern nach Bestäuber untersucht. 
 
+//Um bei der Entwicklung der Edge ML Kamera zielgerichtet arbeiten zu können, ist die Mitwelten Bestäuber Analyse das zu erfüllende Scenario. Durch die grosse Anzahl an verfügbaren und teilweise bereits gelabelten Bilder ist der Weg ein neues Modell zu trainieren geebnet. 
+
+=== Mitwelten Bestäuber Analyse <referenz_use_case>
+
+Die Bestäuber Detektion erfolgt in folgenden wesentlichen Schritten. Ein Foto von mehreren Blüten, zum Beispiel von einem Blumentopf, durchläuft in einem ersten Schritt eine Inferenz zur Detektion von Blüten. Die auf dem Bild detektierten Blüten werden anschliessen ausgeschnitten und somit zu kleineren Bildern. Jedes dieser Bilder wird anschliessend mit einer weiteren Inferenz und einem anderen Machine Learning Modell auf Bestäuber untersucht. Eine grosse Herausforderung in diesem Setup ist, dass die Anzahl Bestäuber-Inferenzen mit der Anzahl detektierten Blüten steigt. Dies kann bei grossen Blütenzahlen zu langen Analysen eines einzigen Bildes führen. Die folgende @mw_pipeline verdeutlicht den Prozess visuell.
+
+#figure(
+  image("../figures/mw_pipeline.png", width: 100%),
+  caption: [Mitwelten Machine Learning Pipeline \ 
+    (Quelle: Automated Analysis for Urban Biodiversity Monitoring, Timeo Wullschleger)
+],
+)<mw_pipeline>
+
+Um Bestäuber auf einer Blüte zu detektierten, ist ein Intervall von 15 Sekunden zur Erfassung von Bildern einzuhalten. 
+#TODO[15 Sekunden Intervall Quelle]
+
+=== Edge Architektur<mw_edge_architektur>
+
+Im Kontext dieser Entwicklung wurden verschiedene Architekturen untersucht. Unter anderem ein System, auf dem die Machine-Learning-Pipeline auf einem Raspberry Pi 3 ausgeführt wird. Der Computer analysiert die Bilder vor Ort und schickt nur die Resultate an das Backend. Die Problematik mit der steigenden Anzahl Inferenzen pro detektierten Blüte kommt aber in diesem Setup besonders zu tragen. Die @mw_analyse_rpi3 zeigt das Verhältnis der detektierten Blüten zur Analysezeit auf. 
+
+#figure(
+  image("../figures/mw_analyse_rpi3.png", width: 100%),
+  caption: [
+    Mitwelten Analyse auf Raspberry Pi 3\
+    (Quelle: Automated Analysis for Urban Biodiversity Monitoring S.61, Timeo Wullschleger)
+],
+)<mw_analyse_rpi3>
+
+Mit wachsender Anzahl Blüten auf dem Bild steigt die Zeit für die Bestäuber Analyse stark an. Da eine Kamera typischerweise immer die selben Blüten untersucht, würde ein solches Setup bei gleichbleibendem Bildintervall von 15 Sekunden immer mehr in Verzögerung geraten. Selbst wenn die Zeiten ohne Aufnahmen aufgrund schlechter Lichtverhältnisse für die Bildanalyse genutzt würden, bleibt diese Architektur in diesem Setup nicht realisierbar. Bei einem Bildintervall von 15s und 12h genügenden Lichtverhältnissen dürfte die Analyse maximal doppelt so lange, also 30 Sekunden für alle Blüten in Anspruch nehmen. Das Machine Learning Model wurde mit einer `max_detection` von 30 Blüten trainiert. Wie aus @mw_analyse_rpi3 ersichtlich, reicht die Zeit nicht, die Analyse auf der Kamera, also dem Raspberry Pi auszuführen.
 
 == Machine Learning Grundlagen
-#TODO[
-    - Frameworks (Unterschiede, Vor- und Nachteile)
-    - Anatomie eines Modells
-        - Architektur 
-            - welche parameter eines modells werden beider Erstellung definiert
-                - Input output tensor
-        - Art: typen von ML modellen (object detection, segmentation, pose)
-        - welche messdaten gibt es für object detection (iou, mAP, perfomance / inferentzeit)
-        - training eines models (sehr oberflächlich)
-        - infernz, was ist das ?
-]
-
-
 
 === ML Frameworks
 Ein Machine-Learning-Framework bildet die Grundlage für die Entwicklung, das Training und die Bereitstellung von Modellen. Es bietet Werkzeuge und Bibliotheken, die den gesamten ML-Workflow unterstützen. Im Gegensatz dazu ist ein Machine-Learning-Modell das konkrete Ergebnis des Trainingsprozesses, das spezifische Aufgaben wie Klassifikation oder Objekterkennung ausführt. Während ein Framework die Infrastruktur bereitstellt, ist das Modell die fertige Anwendung innerhalb dieser Infrastruktur.

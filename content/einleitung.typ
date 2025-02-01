@@ -35,8 +35,8 @@ Dank der fortschreitenden Entwicklung von Edge-Computing-Hardware sind auf Machi
 - Wie sieht eine konkrete Edge ML Kamera aus, für Monitoring von Biodiversität, wie im Projekt SNF Mitwelten angewendet?
 
 == Abgrenzung
-Ein System zur Analyse der Biodiversität mittels Machine Learning beinhaltet viele verschiedene Stellschrauben. 
-In diesem Projekt liegt der Fokus auf der aktuellsten Hardware und wie diese für Edge ML eingesetzt werden kann. Nicht Teil dieses Projekt ist das Trainieren von Modellen. 
+Ein System zur Analyse der Biodiversität mittels Machine Learning beinhaltet viele verschiedene Aspekte. 
+In diesem Projekt liegt der Fokus auf der aktuellsten Hardware und wie diese für Edge ML eingesetzt werden kann. Nicht Teil dieses Projekt ist das Trainieren von Machine Learning Modellen und deren Evaluation. 
 
 
 == Aufbau des Berichts

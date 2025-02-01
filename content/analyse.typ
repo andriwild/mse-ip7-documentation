@@ -1,10 +1,7 @@
 #import "/utils/todo.typ": TODO
 #pagebreak()
 
-= Analyse
-#TODO[
-    (Was braucht es für mich)
-]
+= Analyse<analyse>
 Dieses Kapitel befasst sich mit der Analyse und Bewertung der Möglichkeiten für die Umsetzung einer Edge ML Kamera. Zu diesem Zweck wurden anhand von Experimenten verschiedene Messungen durchgeführt. Für die Analyse dieser Experimente ist ein Dashboard @awild_andriwildip7-ml-model-eval_2024 entwickelt worden, um interaktiv verschiedene Komponenten miteinander zu verglichen. Die folgende @dashboard_screenshot zeigt ein Screenshot der Applikation.
 
 #figure(
@@ -24,32 +21,17 @@ Ein Kamera System, welches flexibel für verschiedene Zwecke einsetzbar ist, kan
 - Naturschutzorganisationen: Institutionen, die Artenschutz- oder Umweltprojekte durchführen.
 - Bildungseinrichtungen: Schulen, Universitäten und andere Lernstätten für Lehrzwecke und studentische Forschungsprojekte.
 - Landwirtschaftliche Betriebe: Landwirte, die ihr Wissen über Bestäuber und Schädlingsbekämpfung erweitern möchten.
-- Regierungs- und Umweltbehörden: Organisationen, die Umweltschutzmaßnahmen überwachen oder Berichte erstellen.
-- Technologie- und Umweltenthusiasten: Personen mit Interesse an IoT und nachhaltiger Technologie.
 
 == Use Cases 
-Durch die grosse Anzahl an verschiedenen Zielgruppen gibt es auch viele verschiende Scenarien, in dem der Einsatz einer Edge ML Kamera vorstellbar ist.
+Durch die grosse Anzahl an verschiedenen Zielgruppen gibt es auch viele verschiedene Szenarien, in dem der Einsatz einer Edge ML Kamera vorstellbar ist.
 
 - Biodiversitätsforschung: Überwachung von Bestäubern, Vögeln, Säugetieren oder Pflanzenwachstum.
 - Artenschutz: Identifikation und Überwachung gefährdeter Tier- oder Pflanzenarten.
 - Umweltüberwachung: Aufzeichnung und Analyse des Einflusses von Umweltbedingungen wie Temperatur, Feuchtigkeit oder Lichtverhältnissen auf die Pflanzen oder Tierwelt.
 - Landwirtschaft: Erkennung von Schädlingen, Optimierung des Pflanzenwachstums.
-- Bildungsprojekte: Praktische Anwendungen für Schüler und Studierende in Naturwissenschaften und Technik, als Ausbildungs Objekt für eine Machine Learning Applikation.
-- Citizen Science: Ermöglicht Gemeinschaften, eigene wissenschaftliche Projekte durchzuführen, z. B. zur lokalen Artenvielfalt oder sich grösseren Projekten anzuschliessen.
 #TODO[
     - Was sollen Personen fähig sein zu machen
 ]    
-
-
-=== Referenz Use Case <referent_use_case>
-Um bei der Entwicklung der Edge ML Kamera zielgerichtet arbeiten zu können, ist die Mitwelten Bestäuber Analyse das zu erfüllende Scenario. Durch die grosse Anzahl an verfügbaren und teilweise bereits gelabelten Bilder ist der Weg ein neues Modell zu trainieren geebnet. Die Bestäuber Detektion erfolgt in folgenden wesentlichen Schritten. Ein Foto von Blüten durchläuft in einem ersten Schritt eine Inferenz zur Detektion von Blüten. Die auf dem Bild detektierten Blüten werden anschliessen ausgeschnitten und somit zu kleineren Fotos. Jedes dieser Fotos wird anschliessend mit einer weiteren Inferenz und einem anderen Machine Learning Modell auf Bestäuber untersucht. Eine grosse Herausforderung in diesem Setup ist, dass die Anzahl Bestäuber-Inferenzen mit der Anzahl detektierten Blüten steigt. Dies kann bei grossen Blütenzahlen zu langen Analysen eines einzigen Bildes führen. 
-
-#figure(
-  image("../figures/mw_pipeline.png", width: 100%),
-  caption: [Mitwelten Machine Learning Pipeline \ 
-    (Quelle: Automated Analysis for Urban Biodiversity Monitoring, Timeo Wullschleger)
-],
-)
 
 == Anforderungen
 #TODO[
@@ -73,16 +55,17 @@ Die folgenden funktionalen Anforderungen an eine Edge ML Kamera wurden identifiz
 - Energieversorgung: Während des Betriebs muss eine stabile Energieversorgung vorhanden sein
 
 === Nicht Funktionale
+
 Die folgenden nicht funktionalen Anforderungen an eine Edge ML Kamera wurden identifiziert:
 Analysedauer: Im Mitwelten Projekt ist definiert, dass die Analyse von Bestäubern in 15 Sekunden erfolgen muss @wullschleger_automated_nodate[p~62]. Die Zeit ist von der Verweildauer von Bestäuber auf einer Blume limitiert.
 
 == Evaluation
-Im folgenden werden Resultate der Untersuchungen bezüglich ML Frameworks und Hardware aufgezeigt. Dabei sind Inferenzen mit PyTorch, Tensorflow lite, ONNX und Hailo Modellen implementiert worden. Die Inferenzen wurden auf Raspberry Pi's mit und ohne Beschleuniger Hardware ausgeführt und gemessen.
+Im folgenden werden Resultate der Untersuchungen bezüglich ML Frameworks und Hardware aufgezeigt. Dabei sind Inferenzen mit PyTorch, Tensorflow lite, ONNX, NCNN und Hailo Modellen implementiert worden. Die Inferenzen wurden auf Raspberry Pi's mit und ohne Beschleuniger Hardware ausgeführt und gemessen.
 
 === Methodik
-Bei den Verwendeten Modellen handelt es sich um die YOLOv5, v8 und v10 Modellreihen in verschiedenen Grössen. Die Grösse des Modells bestimmt die Anzahl der trainierten Gewichte eines Modells. In diesen Versuchen werden die kleineren Modelle verwendet, weil diese grundsätzlich schneller sind. Der Preis für weniger Gewichte und somit schnelleren Inferenzen ist die geringere Genauigkeit. 
+Bei den Verwendeten Modellen handelt es sich um die YOLOv5, v8 und v10 Modellreihen in verschiedenen Grössen. Die Grösse des Modells bestimmt die Anzahl der trainierten Gewichte eines Modells. In diesen Versuchen werden die kleineren Modelle verwendet, weil diese grundsätzlich schneller sind und bei der Analyse zur Bestäuber Erkennung zum Einsatz kamen. Der Preis für weniger Gewichte und somit schnelleren Inferenzen ist die geringere Genauigkeit. 
 
-Die YOLO Modelle wurden gewählt, weil sie zum Zeitpunkt dieser Arbeit gute Ergebnisse in den Bildanalysen liefern und breit eingesetzt werden. Zudem ist die Pipeline des Referenz Use Case @referent_use_case mit Modellen der YOLO Generation 5 umgesetzt. Die Messungen wurden jeweils auf den von Ultralytics vor trainierten YOLO Modellen mit Bildern des COCO Standard Datenset durchgeführt.
+Die YOLO Modelle wurden gewählt, weil sie zum Zeitpunkt dieser Arbeit gute Ergebnisse in den Bildanalysen liefern und breit eingesetzt werden. Zudem ist die Pipeline des Referenz Use Case @referenz_use_case mit Modellen der YOLO Generation 5 umgesetzt. Die Messungen wurden jeweils auf den von Ultralytics vor trainierten YOLO Modellen mit Bildern des COCO Standard Datenset durchgeführt @awild_andriwildip7-ml-model-eval_2024.
 
 #TODO[
    - Abkürzungsschlüssel für Legenden
@@ -112,12 +95,6 @@ Aus diesen Analysen geht hervor, dass mit NCNN auf einer Rasperry Pi 5 CPU die s
 Um nun die Inferenzzeiten weiter zu beschleunigen, wird zusätzliche Hardware benötigt.
 
 === Hardware
-#TODO[
-    - Recherche Hardware
-        - Beschleuniger (TPU, AI-Camera)
-        - Kamera (Rasperry Pi Cam, Webcam)
-        - Edge Computer (Raspberry Pi 4,5)
-]
 Im folgenden werden verschiedene Hardware Setups miteinander verglichen. Teilweise beansprucht spezifische Hardware auch definierte ML Frameworks. Somit ist der Vergleich von verschiedener Hardware nicht mit gleichen Frameworks möglich. Dennoch können die Inferenzzeiten verglichen werden.
 
 ==== Raspberry Pi Vergleiche

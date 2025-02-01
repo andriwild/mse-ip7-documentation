@@ -30,6 +30,6 @@
   grid(
       columns: 2,
       gutter: 1fr,
-      "Munich, " + submissionDate.display("[day].[month].[year]"), author
+      "Windisch, " + submissionDate.display("[day].[month].[year]"), author
   )
 }
