@@ -14,7 +14,9 @@
 
 Der in @prototyp_1 vorgestellte Prototyp zeigt, dass die Mitwelten-Bestäuber-Analyse auch auf einem Edge-Device realisierbar ist. Eine solche Umsetzung war mit Hardware im gleichen Preissegment bislang noch nicht möglich.
 
-Die Entwicklung einer Applikation für unterschiedliche Einsatzbereiche hat deutlich gemacht, dass sich im Bereich der Edge-AI-Hardware und -Software einiges bewegt. Dank der kontinuierlichen Weiterentwicklung spezialisierter Machine-Learning-Hardware können immer mehr Anwendungen direkt an der Edge realisiert werden, sodass die Leistungsfähigkeit moderner Edge-Computer zunehmend weniger als limitierender Faktor wirkt.
+Die Entwicklung einer Applikation für unterschiedliche Einsatzbereiche hat deutlich gemacht, dass sich im Bereich der Edge-AI-Hardware und Software einiges bewegt. Dank der Weiterentwicklung spezialisierter Machine-Learning-Hardware können immer mehr Anwendungen direkt an der Edge realisiert werden, sodass die Leistungsfähigkeit moderner Edge-Computer zunehmend weniger als limitierender Faktor wirkt.
+
+== Versuchsaufbau und Temperaturentwicklung
 
 Besonders hervorzuheben ist der Einsatz von Beschleunigern, wie etwa den Komponenten von Hailo, die nicht nur effizienter arbeiten, sondern auch die Wärmeentwicklung signifikant reduzieren. Ein einfacher Versuchsaufbau auf @versuchsaufbau_temp illustriert den Unterschied zur reinen CPU-Inferenz: Während das Gehäuse bei Einsatz der Hailo-Inferenz konstant auf einem niedrigen Temperaturniveau bleibt, führt die CPU-Inferenz zu einem rapiden Temperaturanstieg. 
 
@@ -29,6 +31,9 @@ Mit der CPU betriebenen Inferenz erhöhte sich die Temperatur im geschlossenen G
 
 Diese Eigenschaft hat positive Auswirkungen auf das Gehäusedesign – insbesondere bei Anwendungen wie Biodiversitätsanalysen, bei denen das Gerät oft im Freien und in wasserdichten Gehäusen eingesetzt wird. Der Wegfall von aktiver Belüftung eröffnet hier wesentliche Konstruktionsvorteile.
 
+
+Ein Punkt beim Umgang mit den Hailo Beschleuniger, wecher nochmals untersucht werden muss ist die Stabilität in Betriebt. Während länger laufenden Betriebstest kam es mehrfach zu Segmentation fault. Dieser Umstand ist zum Zeitpunkt dieser Arbeit noch nicht geklärt und bedarf an weiteren Untersuchungen.
+
 == Konkurrenz Produkte
 Die Möglichkeit, Analysen direkt auf einem Edge-Device auszuführen, ist eine vielversprechende Idee, was durch die Verfügbarkeit von Produkten auf dem Markt bestätigt wird. Zwei besonders interessante Geräte sind die reCamera @noauthor_recamera_nodate und die EcoEye-Kamera @noauthor_ecoeye_nodate, die beide über SeeedStudio erhältlich sind.
 
@@ -39,3 +44,6 @@ Die EcoEye-Kamera wurde speziell für den Ausseneinsatz entwickelt und verfügt 
 #pagebreak()
 = Fazit
 Die Infererenz Zeiten beschleunigt mithilfe von Hailo Komponenten sind für die Bestäuber Analyse kürzer als Verlangt. Daher 
+Abschliessend lässt sich sagen, dass die entwickelte Edge ML Kamera grosses Potenzial für Citizen Science-Projekte bietet, da sie den Zugang zu modernen Machine-Learning-Methoden auch ausserhalb zentraler Infrastrukturen ermöglicht. In dieser Arbeit wurde gezeigt, wie der gezielte Einsatz optimierter ML-Frameworks und spezialisierter Hardware – etwa moderner Hailo-Beschleuniger, NCNN-optimierter Modelle und des Raspberry Pi 5 – zu deutlich schnelleren Inferenzzeiten und einem geringeren Energieverbrauch führt.
+
+Dank dieser schnellen Inferenzzeiten können zudem grössere und präzisere Modelle trainiert werden, die trotzdem die Zeitvorgaben erfüllen. Ausserdem legt die Analyse nahe, dass es prinzipiell möglich wäre, mehr als einen Kamerastream gleichzeitig auf einem einzigen Gerät auszuwerten. Dies wäre besonders in abgelegenen oder ressourcenbegrenzten Umgebungen von Vorteil, da so mehrere Datenquellen parallel verarbeitet werden könnten.

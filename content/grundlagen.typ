@@ -2,7 +2,7 @@
 #pagebreak()
 
 = Grundlagen 
-Dieses Kapitel beschreibt den Theoretischen Inhalt dieser Arbeit. Um die späteren Analysen und Evaluationen verstehen zu können, werden die grundlegenden Konzepte, Technologien und Frameworks vorgestellt, die in diesem Projekt verwendet werden. Dazu gehören die Prinzipien des Machine Learnings, die Rolle von Edge Computing sowie die eingesetzten Hardware- und Softwarekomponenten. Ebenso werden relevante Metriken und Methoden erläutert, die zur Bewertung der entwickelten Systeme herangezogen werden.
+Dieses Kapitel beschreibt den Theoretischen Inhalt dieser Arbeit. Um die späteren Analysen und Evaluationen verstehen zu können, werden die grundlegenden Konzepte, Technologien und Frameworks vorgestellt, die in diesem Projekt zum Einsatz kommen. Dazu gehören die Prinzipien des Machine Learnings, die Rolle von Edge Computing sowie die eingesetzten Hardware- und Softwarekomponenten.
 
 == Citizen Science
 #TODO[
@@ -32,67 +32,14 @@ Das Buch The Science of Citizen Science @vohland_science_2021[p~283] diskutiert 
 
 Aus der illustration geht hervor, dass verschiedenste Aspekte die Bürgerinnen und Bürger zu einer aktiven Beteiligung motivieren kann. Nebst den Fachlichen sind auch Soziale Themen von Bedeutung. 
 
-Auf der anderen Seite profitieren auch die Projekt Initianten. Die Organisation und Zusammenarbeit mit Aussenstehenden kann eine spannende Aufgabe sein. Es stellt die Projekt verantwortlichen vor neue Herausforderungen um die Freiwilligen motivierend in das Projekt miteinzubeziehen. Ein Grundstein dieser Angelegenheit ist die Zugänglichkeit zu Projekt Instrumenten. In Bezug auf ein Projekt mit Edge ML kann es besonders wichtig sein, dass die Freiwilligen verstehen wie das Setup und die damit verbundene Technik funktioniert und damit die Faszination entfacht.
+Auf der anderen Seite profitieren auch die Projekt Initianten. Die Organisation und Zusammenarbeit mit Aussenstehenden kann eine spannende Aufgabe sein. Es stellt die Projekt-Verantwortlichen vor neue Herausforderungen um die Freiwilligen motivierend in das Projekt miteinzubeziehen. Ein Grundstein dieser Angelegenheit ist die Zugänglichkeit zu Projekt Instrumenten. In Bezug auf ein Projekt mit Edge ML kann es besonders wichtig sein, dass die Freiwilligen verstehen wie das Setup und die damit verbundene Technik funktioniert und damit Faszination entfachen kann.
 
-
-== Biodiversität Monitoring
-
-Biodiversität Monitoring befasst sich grundsätzlich mit dem Beobachten und Analysieren von Tier - und Pflanzenwelt.
-
-#quote(attribution:  <bdm_verlassliche_nodate>)["Die biologische Vielfalt bildet eine Lebensgrundlage der Schweiz. Deshalb ist es wichtig, ihren Zustand und ihre Entwicklung zu kennen."]
-Aus diesem Grund ist es von grosser Bedeutung die Umwelt zu beobachten und Veränderungen festzustellen. Um diese Arbeit zu vereinfachen, sind automatisierte Lösungen für ein Monitoring gefragt. 
-
-Ein System zur automatisierten Datenerfassung wurde im Rahmen des Projekts Mitwelten entwickelt @wullschleger_data_nodate @wullschleger_automated_nodate. Hierfür wurden verschiedene Sensoren zu einem IoT-Toolkit kombiniert. Dieses Toolkit ermöglicht es, Daten von dezentralen Systemen zu erfassen und an ein zentrales Backend weiterzuleiten.
-
-
-Das IoT-Toolkit umfasst unter anderem eine Kamera, die in regelmässigen Abständen Fotos von Blüten aufnimmt. Im Rahmen des Projekts wurden so insgesamt 1,5 Millionen Bilder generiert. @pollinator_cam zeigt eine im Feld aufgestellte IoT-Kamera.
-
-#figure(
-  image("../figures/pollinator_cam.jpg", width: 50%),
-  caption: [
-    Pollinator Kamera im Feld\
-    (Quelle: mitwelten.ch, aufgerufen am 23.01.2025)
-],
-)<pollinator_cam>
-
-Die enorme Menge an Bilddaten lässt sich nicht manuell analysieren. Deshalb entwickelte das Projekt-Team eine Machine-Learning-Pipeline, die Bestäuber automatisch erkennt.
-Die technische Architektur des Systems verbindet die Kamera mit einem leistungsstarken Backend. Die Kamera, bestehend aus einem Raspberry Pi und einer angeschlossenen Kameraeinheit, erfasst die Bilder und überträgt diese über einen Access Point an das Backend. Auf dem Backend Server läuft eine Machine Learning Pipeline, welche die empfangenen Bildern nach Bestäuber untersucht. 
-
-//Um bei der Entwicklung der Edge ML Kamera zielgerichtet arbeiten zu können, ist die Mitwelten Bestäuber Analyse das zu erfüllende Scenario. Durch die grosse Anzahl an verfügbaren und teilweise bereits gelabelten Bilder ist der Weg ein neues Modell zu trainieren geebnet. 
-
-=== Mitwelten Bestäuber Analyse <referenz_use_case>
-
-Die Bestäuber Detektion erfolgt in folgenden wesentlichen Schritten. Ein Foto von mehreren Blüten, zum Beispiel von einem Blumentopf, durchläuft in einem ersten Schritt eine Inferenz zur Detektion von Blüten. Die auf dem Bild detektierten Blüten werden anschliessen ausgeschnitten und somit zu kleineren Bildern. Jedes dieser Bilder wird anschliessend mit einer weiteren Inferenz und einem anderen Machine Learning Modell auf Bestäuber untersucht. Eine grosse Herausforderung in diesem Setup ist, dass die Anzahl Bestäuber-Inferenzen mit der Anzahl detektierten Blüten steigt. Dies kann bei grossen Blütenzahlen zu langen Analysen eines einzigen Bildes führen. Die folgende @mw_pipeline verdeutlicht den Prozess visuell.
-
-#figure(
-  image("../figures/mw_pipeline.png", width: 100%),
-  caption: [Mitwelten Machine Learning Pipeline \ 
-    (Quelle: Automated Analysis for Urban Biodiversity Monitoring, Timeo Wullschleger)
-],
-)<mw_pipeline>
-
-Um Bestäuber auf einer Blüte zu detektierten, ist ein Intervall von 15 Sekunden zur Erfassung von Bildern einzuhalten. 
-#TODO[15 Sekunden Intervall Quelle]
-
-=== Edge Architektur<mw_edge_architektur>
-
-Im Kontext dieser Entwicklung wurden verschiedene Architekturen untersucht. Unter anderem ein System, auf dem die Machine-Learning-Pipeline auf einem Raspberry Pi 3 ausgeführt wird. Der Computer analysiert die Bilder vor Ort und schickt nur die Resultate an das Backend. Die Problematik mit der steigenden Anzahl Inferenzen pro detektierten Blüte kommt aber in diesem Setup besonders zu tragen. Die @mw_analyse_rpi3 zeigt das Verhältnis der detektierten Blüten zur Analysezeit auf. 
-
-#figure(
-  image("../figures/mw_analyse_rpi3.png", width: 100%),
-  caption: [
-    Mitwelten Analyse auf Raspberry Pi 3\
-    (Quelle: Automated Analysis for Urban Biodiversity Monitoring S.61, Timeo Wullschleger)
-],
-)<mw_analyse_rpi3>
-
-Mit wachsender Anzahl Blüten auf dem Bild steigt die Zeit für die Bestäuber Analyse stark an. Da eine Kamera typischerweise immer die selben Blüten untersucht, würde ein solches Setup bei gleichbleibendem Bildintervall von 15 Sekunden immer mehr in Verzögerung geraten. Selbst wenn die Zeiten ohne Aufnahmen aufgrund schlechter Lichtverhältnisse für die Bildanalyse genutzt würden, bleibt diese Architektur in diesem Setup nicht realisierbar. Bei einem Bildintervall von 15s und 12h genügenden Lichtverhältnissen dürfte die Analyse maximal doppelt so lange, also 30 Sekunden für alle Blüten in Anspruch nehmen. Das Machine Learning Model wurde mit einer `max_detection` von 30 Blüten trainiert. Wie aus @mw_analyse_rpi3 ersichtlich, reicht die Zeit nicht, die Analyse auf der Kamera, also dem Raspberry Pi auszuführen.
 
 == Machine Learning Grundlagen
 
 === ML Frameworks
-Ein Machine-Learning-Framework bildet die Grundlage für die Entwicklung, das Training und die Bereitstellung von Modellen. Es bietet Werkzeuge und Bibliotheken, die den gesamten ML-Workflow unterstützen. Im Gegensatz dazu ist ein Machine-Learning-Modell das konkrete Ergebnis des Trainingsprozesses, das spezifische Aufgaben wie Klassifikation oder Objekterkennung ausführt. Während ein Framework die Infrastruktur bereitstellt, ist das Modell die fertige Anwendung innerhalb dieser Infrastruktur.
-
+Ein Machine-Learning-Framework bildet die Grundlage für die Entwicklung, das Training und die Bereitstellung von Modellen. Es bietet Werkzeuge und Bibliotheken, die den gesamten ML-Workflow unterstützen. Im Gegensatz dazu ist ein Machine-Learning-Modell das konkrete Ergebnis des Trainingsprozesses, das spezifische Aufgaben wie Klassifikation oder Objekterkennung ausführt. Wird ein Modell nach dem Training benutzt, um zum Beispiel um Objekte zu erkennen, spricht man von Inferenz. Dies beschreibt den Prozess der Ausführung des Modells auf ungesehenen Daten.
+Das Training sowie die Inferenz eines Modells kann mit unterschiedlichen Frameworks vollzogen werden. Jedes Framework hat ihr eigenes Modell Format. So lassen sich beispielsweise PyTorch Modelle nicht ohne weiteres mit TensorFlow ausführen. Folgend sind diejenigen vorgestellt, welche in dieser Arbeit zum Einsatz kamen.
 
 ==== TensorFlow
 TensorFlow @noauthor_tensorflow_nodate wurde ursprünglich von Google entwickelt und ist inzwischen ein Open Source Projekt. Das Framework ist eher für Systeme in Produktion gedacht.
@@ -100,19 +47,29 @@ TensorFlow @noauthor_tensorflow_nodate wurde ursprünglich von Google entwickelt
 - Nachteile: Steile Lernkurve, insbesondere für Einsteiger. Komplex durch die vielen Features.
 
 ==== TensorFlow Lite
+Stellt die für Edge Geräte optimierte Variante des TensorFlow Framework dar.
 - Vorteile: Speziell für den Betrieb auf ressourcenbeschränkten Geräten optimiert. Reduzierte Speicher- und Rechenanforderungen für Echtzeit-Anwendungen.
 - Nachteile: Eingeschränkte Unterstützung für komplexe Modelle, Quantisierung erforderlich.
 
 
 ==== PyTorch
-PyTorch @noauthor_pytorch_nodate ist ebenfalls Open Source und hat seinen Ursprung im Forschungsteam für künstliche Intelligenz von Facebook. Das Framework eignet sich für Experimente kann aber auch für Systeme in Produktion eingesetzt werden. ChatGPT von OpenAI arbeitet im Hintergrund mit dem Pytorch Framework @noauthor_openai_nodate.
+PyTorch @noauthor_pytorch_nodate ist ebenfalls Open Source und hat seinen Ursprung im Forschungsteam für künstliche Intelligenz von Facebook. Das Framework eignet sich für Experimente kann aber auch für Systeme in Produktion eingesetzt werden. ChatGPT von OpenAI arbeitet beispielsweise im Hintergrund mit dem Pytorch Framework @noauthor_openai_nodate.
 - Vorteile: Hat eine gute Community und eine ausführliche Dokumentation. Viele Features und viele Tutorials.
-- Nachteile: Für Einsteiger 
+- Nachteile: Steile Lernkurve, insbesondere für Einsteiger.
 
 ==== ONNX<onnx>
-ONNX (Open Neural Network Exchange) @noauthor_onnx_nodate ist ein generalisiertes Format von Deep-Learning Modellen. Dies ermöglicht den Austausch von Modellen zwischen verschiedenen Frameworks. ONNX wird von Microsoft, Amazon, Facebook und weiteren Partners als Open-Source Projekt entwickelt.
+ONNX (Open Neural Network Exchange) @noauthor_onnx_nodate ist ein generalisiertes Format von Deep-Learning Modellen. Dies ermöglicht den Austausch von Modellen zwischen verschiedenen Frameworks. ONNX wurde ursprünglich von Facebook und Microsoft entwickelt. Zurzeit wird das Framework von mehreren Partnern als Open-Source Projekt weiterentwickelt.
 - Vorteile: Austauschformat, das Modelle zwischen verschiedenen Frameworks kompatibel macht. Optimierte Laufzeitumgebungen, die speziell für Edge-Geräte geeignet sind.
 - Nachteile: Begrenzte Funktionalität für Modelltraining, primär für den Einsatz trainierter Modelle gedacht. Kleinere Community im Vergleich zu TensorFlow und PyTorch.
+
+Eine Spezialität des ONNX Framework ist die Fähigkeit, Modelle von anderen Formaten in das ONNX Format zu konvertieren. Ebenso lassen sich ONNX Modell wieder zu anderen Formaten exportieren. Dies führt dazu, dass ONNX als Art Drehscheibe zwischen den verschiedenen Frameworks fungiert @ultralytics_onnx_nodate.
+
+#figure(
+  image("../figures/onnx_model_convertion.png", width: 70%),
+  caption: [ \
+    (Quelle: https://docs.ultralytics.com/integrations/onnx/, aufgerufen am 02.02.2025)
+  ],
+)
 
 ==== NCNN<ncnn>
 NCNN @ni_ncnn_2017 ist eine high performance computing platform für mobile Endgeräte. Dieses Framework wird of auf Smartphone verwendet, weil es optimiert für Geräte mit beschränkter Rechenleistung ist.
@@ -122,24 +79,20 @@ NCNN @ni_ncnn_2017 ist eine high performance computing platform für mobile Endg
 ==== Hailo
 Hailo, gegründet im Jahr 2017, hat sich als führendes Unternehmen im Bereich leistungsfähiger KI-Prozessoren für Edge-Anwendungen etabliert. Mit ihrer eigens entwickelten Hardware-Architektur verfolgt Hailo das Ziel, Machine Learning auch ausserhalb von Rechenzentren zugänglich und effizient nutzbar zu machen @noauthor_fuhrende_nodate. Die Nutzung der Hailo-Chips erfordert eine Konvertierung der Modelle, wofür das Unternehmen eine umfassende Software-Suite bereitstellt. Diese Suite enthält alle notwendigen Werkzeuge, um Modelle auf die spezifischen Anforderungen der Hailo-Hardware abzustimmen.
 
-- Vorteile: Ermöglicht sehr schnelle Inferenzen und Hailo bietet eine gute Dokumentation und  ein grosses Ökosystem
-- Nachteile: Eine Intensive Einarbeitung ist notwendig und der konvertierungsprozess erfordert Modulspezifisches Wissen..
+- Vorteile: Ermöglicht sehr schnelle Inferenzen. Hailo bietet eine gute Dokumentation und ein grosses Ökosystem.
+- Nachteile: Eine Intensive Einarbeitung ist notwendig und der konvertierungsprozess erfordert Modellspezifisches Wissen.
 
 
 ==== Ultralytics
-Das Ultralytics @ultralytics_home_nodate Framework ist ein auf PyTorch basierendes Open-Source-Framework, das vor allem für die Entwicklung von Modellen zur Objekterkennung bekannt ist. Es wurde durch die Implementierung von YOLOv5 (You Only Look Once) populär und bietet eine benutzerfreundliche Umgebung für das Training und die Bereitstellung von Objekterkennungsmodellen. Inzwischen sind neuere Implementierungen der YOLO Familie verfügbar und mit Ultralytics anwendbar.
+Ultralytics @ultralytics_home_nodate ist ein auf PyTorch basierendes Open-Source-Framework, das vor allem für die Entwicklung von Modellen zur Objekterkennung bekannt ist. Es wurde durch die Implementierung von YOLOv5 (You Only Look Once) populär und bietet eine benutzerfreundliche Umgebung für das Training und die Bereitstellung von Objekterkennungsmodellen. Inzwischen sind neuere Implementierungen der YOLO Familie verfügbar und mit Ultralytics anwendbar.
 - Vorteile: Die Verwendung des Framework ist sehr einfach und dadurch geeignet für Einsteiger. Modelle können in andere Formate exportiert werden. Inferenzen werden für PyTorch Modelle angeboten.
 - Nachteile: Die Flexibilität im Vergleich zu anderen Frameworks ist eingeschränkt.
 
 
-==== Trade-Off's
-- Flexibilität vs. Spezialisierung: Frameworks wie TensorFlow und PyTorch bieten umfassende Funktionen, benötigen jedoch mehr Ressourcen. Edge-spezifische Frameworks sind dagegen ressourcenschonender, aber eingeschränkter in ihrer Funktionalität.
-- Einsatzgebiet: Die Wahl des Frameworks sollte sich an den spezifischen Anforderungen orientieren, wie etwa der Zielplattform (Cloud vs. Edge), der Modellkomplexität und der Verfügbarkeit von Ressourcen.
-
 === Anatomie von Machine Learning Modellen
 Ein Machine-Learning-Modell besteht aus einer Architektur, die dessen Aufbau und Funktionsweise definiert, und einem Satz von Parametern, die während des Trainings optimiert werden. Die Architektur eines Modells legt grundlegende Eigenschaften fest, wie die Struktur der Neuronen und Layer, die Verbindungen zwischen ihnen sowie Eingabe- und Ausgabetensoren. Die Eingabetensoren bestimmen, welche Form und Dimensionen die Daten haben müssen (z. B. die Größe von Bildern), während die Ausgabetensoren das Ergebnis des Modells beschreiben, etwa Klassenetiketten oder Koordinaten für erkannte Objekte.
 
-Es gibt verschiedene Typen von Machine-Learning-Modellen, die je nach Anwendungsfall eingesetzt werden. Zu den wichtigsten gehören Modelle für Objekterkennung, die Objekte in einem Bild lokalisieren und klassifizieren, Bildsegmentierung, die jedem Pixel eines Bildes eine Klasse zuordnet, und Posenschätzung, die die Körperhaltung von Personen oder Tieren analysiert. 
+Es gibt verschiedene Typen von Machine-Learning-Modellen, die je nach Anwendungsfall eingesetzt werden. Zu den wichtigsten gehören Modelle für Objekterkennung, die Objekte in einem Bild lokalisieren und klassifizieren, Bildsegmentierung, die jedem Pixel eines Bildes eine Klasse zuordnet, und Posenschätzung, die die Körperhaltung von Personen oder Tieren analysiert. Die folgende @ml_tasks zeigt eine Visualisierung der verschiedenen Disziplinen.
 #figure(
     grid(
         columns: 4,
@@ -167,7 +120,7 @@ Es gibt verschiedene Typen von Machine-Learning-Modellen, die je nach Anwendungs
 \
 Für die Objekterkennung werden verschiedene Metriken verwendet, um die Modellleistung zu bewerten. Dazu zählen die Intersection over Union (IoU), die angibt, wie gut vorhergesagte und tatsächliche Direktionsfläche übereinstimmen, und die Mean Average Precision (mAP), die die Präzision über verschiedene Schwellenwerte hinweg aggregiert. Zusätzlich spielen Leistungskennzahlen wie die Inferenzzeit eine wichtige Rolle, insbesondere bei Echtzeitanwendungen.
 
-Das Training eines Modells umfasst die Anpassung der Parameter auf Basis eines grossen Datensatzes, um Muster und Zusammenhänge zu lernen. Dabei kommen Optimierungsalgorithmen wie Gradient Descent zum Einsatz, die das Modell iterativ verbessern. Nach dem Training wird das Modell in der Inferenzphase genutzt. Inferenz bezeichnet den Prozess, bei dem ein trainiertes Modell neue Eingaben verarbeitet und Vorhersagen generiert.
+Das Training eines Modells umfasst die Anpassung der Parameter auf Basis eines grossen Datensatzes, um Muster und Zusammenhänge zu lernen. Dabei kommen Optimierungsalgorithmen wie Gradient Descent zum Einsatz, die das Modell iterativ verbessern. Nach dem Training wird das Modell in der Inferenzphase genutzt.
 
 === Geschwindigkeit einer Inferenz
 
@@ -178,12 +131,13 @@ Die Dauer einer Inferenz hängt massgeblich von den Berechnungen des Modells und
     (Quelle: lamarr-institute.org/blog/deep-neural-networks, abgerufen am 23.01.2025)]
 )<neuronal_net>
 
-Je mehr Hidden Layers und trainierte Gewichte ein Modell besitzt, desto präziser werden seine Vorhersagen. Allerdings steigt damit auch der Rechenaufwand. Aus diesem Grund existieren YOLO-Modelle, wie sie in dieser Arbeit verwendet wurden, in verschiedenen Größen @ultralytics_yolov5_nodate.
+Je mehr Hidden Layers und trainierte Gewichte ein Modell besitzt, desto präziser werden seine Vorhersagen. Allerdings steigt damit auch der Rechenaufwand. Aus diesem Grund existieren YOLO-Modelle, wie sie in dieser Arbeit verwendet wurden, in verschiedenen Dimensionen @ultralytics_yolov5_nodate.
 
-Ein weiterer entscheidender Faktor ist die Hardware, auf der die Berechnungen durchgeführt werden. Durch das Parallelisieren von Berechnungen lassen sich erhebliche Geschwindigkeitsvorteile erzielen. Besonders geeignet sind GPUs (Graphics Processing Units), TPUs (Tensor Processing Units) und NPUs (Neural Processing Units). Da die Berechnungen in neuronalen Netzen denen in der Bildverarbeitung ähneln, sind diese Hardwarelösungen sowohl für das Training als auch für die Anwendung von ML-Modellen optimal.
+Ein weiterer entscheidender Faktor ist die Hardware, auf der die Berechnungen durchgeführt werden. Durch das Parallelisieren von Berechnungen lassen sich erhebliche Geschwindigkeitsvorteile erzielen. Besonders geeignet sind GPUs (Graphics Processing Units), TPUs (Tensor Processing Units) und NPUs (Neural Processing Units). Diese Komponenten werden in @hw_accel beschrieben. 
 
-TPUs, von Google für das TensorFlow-Framework entwickelt @noauthor_tpu_nodate, sind speziell für die benötigten Matrixoperationen optimiert. Ebenso wurde die NPU @noauthor_what_2024 entwickelt, um ML-Tasks hochgradig parallelisiert und effizient auszuführen. In bestimmten Szenarien kann eine NPU eine GPU in Sachen Geschwindigkeit deutlich übertreffen @noauthor_npu_2024.
+Während auf eine GPU grundsätzlich keine Vorbedingungen an des Model gestellt werden, ist dies bei der TPU und NPU durchaus notwendig. Dabei spielen zwei Strategien eine wichtige Rolle: Quantisieren und Pruning. Beim Quantisieren werden die Fliesskommazahlen der Gweichte zu Ganzzahlen konvertiert, wodurch die Präzision abnimmt. Die reduziert den Speicherbedarf und ermöglicht eine schnellere Ausführung, weil weniger Rechenoperationen sind. Beim Pruning werden unwesentliche Verbindungen im Modell Netz entfernt, wordurch sich wiederum die Anzahl Rechenoperationen reduziert. Die Ansätze werden auch kombiniert angewendet.
 
+#TODO[Quantisierung, Pruning: Quelle]
 
 == Edge Computing
 #TODO[ (vllt auch in der AUsgangslage erwähnen) ]
@@ -196,8 +150,8 @@ Allerdings bringt dieser Ansatz auch Herausforderungen mit sich. Edge-Geräte ve
 === Edge ML
 Edge Machine Learning kombiniert die Prinzipien des Edge Computing mit den Anforderungen moderner Machine-Learning-Modelle, indem die Rechenleistung direkt auf die Endgeräte verlagert wird. Dieser Ansatz wird entweder auf der CPU ausgeführt oder durch spezialisierte Hardware beschleunigt. Diese ist darauf ausgelegt, ML-Modelle performant, effizient und ressourcenschonend auszuführen. Beschleuniger Hardware ist dann erforderlich, wenn die Inferenz auf der CPU zu viel Zeit oder Ressourcen in Anspruch nimmt. Diese Hardware wird typischerweise mit einem Host System verbunden, welches mit der Beschleuniger Hardware kommunizieren kann.
 
-Die Weiterentwicklung der kompakten Computer sowie die auf ML spezialiserte Hardware öffnet neue Möglichkeiten im Bereich des Edge ML.
-Zum Zeitpunkt dieser Arbeit sind die Entwicklungen im vollen Gange. Nicht nur auf Seite der Hardware, sondern auch im Umfeld des Machine Learning wird zur Zeit geforscht und entwickelt. Somit kann in diesem Projekt unter Anderem neuste Hardware eingesetzt werden, welche sich in der Industrie möglicherweise erst in der kommenden Zeit etablieren wird. Die im Projekt eingesetze Hardware ist im folgenden aufgeführt.
+Die Weiterentwicklung der kompakten Computer (Edge Device) sowie die auf ML spezialiserte Hardware öffnet neue Möglichkeiten im Bereich des Edge Computing.
+Zum Zeitpunkt dieser Arbeit sind die Entwicklungen im vollen Gange. Nicht nur auf Seite der Hardware, sondern auch im Umfeld des Machine Learning wird zur Zeit erforscht und entwickelt. Somit kann in diesem Projekt unter Anderem neuste Hardware eingesetzt werden, welche sich in der Industrie möglicherweise erst in der kommenden Zeit etablieren wird. Die im Projekt eingesetze Hardware ist im folgenden aufgeführt.
 
 === Host Systeme
 Der einfachste Weg Machine Learning im Bereich Edge zu betreiben ist die CPU eines Edge Computers. Um Erfahrungen zu sammeln sind verschiedene Einplatinen Computer evaluiert worden. Hauptsächlich hat sich die Verwendung von Raspberry Pi Computer durchgesetzt. Sie weisen ein gutes Preis Leistungsverhältnis auf und sind durch Dokumentation und Community extrem gut unterstütz.
@@ -214,7 +168,7 @@ Das Raspberry Pi 4 8 GB ist für rund 85Fr. @noauthor_raspberry_nodate-3 erhält
 )
 
 ==== Raspberry Pi 5
-Das Raspberry Pi 5 stellt den Nachfolger vom Model 4 dar und ist mit 8 GB RAM und einer CPU Taktfrequenz von 2.4GHz ausgerüstet. Ebenso ist eine PCI Schnittstelle verfügbar, wodurch das anschliessen von leistungsstarker Beschleuniger Hardware möglich wird. Dieses Setup ist für ca. 85 Fr. @noauthor_raspberry_nodate-4 Erhältlich.
+Das Raspberry Pi 5 stellt den Nachfolger vom Model 4 dar und ist mit 8 GB RAM und einer CPU Taktfrequenz von 2.4GHz ausgerüstet. Ebenso ist eine PCI Schnittstelle verfügbar, wodurch das anschliessen von leistungsstarker Beschleuniger Hardware möglich wird. Dieses Setup ist für ca. 85 Fr. @noauthor_raspberry_nodate-4 erhältlich.
 
 #figure(
   image("../figures/rpi5.png", width: 40%),
@@ -225,7 +179,7 @@ Das Raspberry Pi 5 stellt den Nachfolger vom Model 4 dar und ist mit 8 GB RAM un
 )
 
 ==== BeagleY-AI
-Das BeagleY-AI Board hat eine CPU Taktfrequenz von 1.5GHz und 4 GB RAM. Das besondere an diesem Board ist der integrierte AI Accelerator mit 4 TOPS (Terra Operation per Second). Das Board ist für run 70 Fr. @noauthor_beagley-ai_nodate Erhältlich. 
+Das BeagleY-AI Board hat eine CPU Taktfrequenz von 1.5GHz und 4 GB RAM. Das besondere an diesem Board ist der integrierte AI Accelerator mit 4 TOPS (Terra Operation per Second). Das Board ist für run 70 Fr. @noauthor_beagley-ai_nodate erhältlich. 
 
 #figure(
   image("../figures/beagle.png", width: 40%),
@@ -234,12 +188,18 @@ Das BeagleY-AI Board hat eine CPU Taktfrequenz von 1.5GHz und 4 GB RAM. Das beso
 ],
 )
 
-=== Hardware Beschleuniger
+=== Hardware Beschleuniger<hw_accel>
 Machine-Learning-Beschleuniger sind spezialisierte Hardwarekomponenten, die entwickelt wurden, um die Ausführung von Machine-Learning-Modellen zu optimieren. Sie sind insbesondere für rechenintensive Aufgaben wie Matrixmultiplikationen und Tensorberechnungen ausgelegt, die in vielen ML-Algorithmen eine zentrale Rolle spielen. Zu den bekanntesten Typen solcher Beschleuniger gehören GPUs (Graphics Processing Units) und TPUs (Tensor Processing Units).
 
-Eine GPU wurde ursprünglich für die Verarbeitung von Grafikanwendungen entwickelt, hat sich jedoch aufgrund ihrer Fähigkeit zur parallelen Verarbeitung tausender Operationen gleichzeitig als ideal für Machine-Learning-Aufgaben erwiesen. GPUs kommen häufig bei grossen Modellen und im Training von neuronalen Netzwerken zum Einsatz, da sie eine hohe Rechenleistung bieten.
+Eine GPU wurde ursprünglich für die Verarbeitung von Grafikanwendungen entwickelt, hat sich jedoch aufgrund ihrer Fähigkeit zur parallelen Verarbeitung von Operationen gleichzeitig als ideal für Machine-Learning-Aufgaben erwiesen. GPUs kommen häufig bei grossen Modellen und im Training von neuronalen Netzwerken zum Einsatz, da sie eine hohe Rechenleistung bieten.
 
-Eine TPU ist ein speziell entwickelter Prozessor, der ausschliesslich für Machine-Learning-Workloads optimiert wurde. Sie wurde von Google entwickelt und ist besonders effizient bei der Verarbeitung von Tensoroperationen, wie sie in Frameworks wie TensorFlow genutzt werden. TPU's unterscheiden sich von GPUs durch ihre Fokussierung auf deterministische Operationen, die typischerweise in ML-Modellen vorkommen, was sie besonders leistungsstark und energieeffizient macht. TPU's sind für das Training und die Inferenz geeignet, wobei sie bei letzterem aufgrund ihrer geringen Latenz und Effizienz eine herausragende Rolle spielen.
+Eine TPU @noauthor_tpu_nodate ist ein speziell entwickelter Prozessor, der ausschliesslich für Machine-Learning-Workloads optimiert wurde. Sie wurde von Google entwickelt und ist besonders effizient bei der Verarbeitung von Tensoroperationen, wie sie in Frameworks wie TensorFlow genutzt werden. TPU's sind für das Training und die Inferenz geeignet, wobei sie bei letzterem aufgrund ihrer geringen Latenz und Effizienz eine herausragende Rolle spielen.
+
+Ebenso wurde die NPU @noauthor_what_2024 entwickelt, um ML-Tasks hochgradig parallelisiert und effizient auszuführen. In bestimmten Szenarien kann eine NPU eine GPU in Sachen Geschwindigkeit deutlich übertreffen @noauthor_npu_2024.
+
+#TODO[NPU ausführen]
+
+
 
 ==== Coral USB Accelerator
 Der USB-Dongle von Google, Coral USB Accelerator, hat eine dedizierte TPU (Tensor Processing Unit). Solche Geräte lassen sich leicht in bestehende Systeme integrieren und ermöglichen die schnelle Ausführung von ML-Algorithmen ohne signifikante Anpassungen der Infrastruktur. Der Preis bewegt sich um 89.90Fr.@noauthor_coral_nodate.  
@@ -288,4 +248,60 @@ Dieser Ansatz verlagert die intensiven Berechnungen womit der Edge Computer weni
 (Quelle: https://www.raspberrypi.com/documentation/accessories/ai-camera.html, aufgerufen am 20.01.2025)],
 )<ai_cam_arch>
 
-Beim Sensor handelt es sich um einen Sony IMX500 Chip @noauthor_ai_nodate-1, welcher ein Bild aufnehmen kann. Die Daten gelangen dann als RAW-Image zum ISP, einem kleinen Image Signal Processor. Dieser wandelt das RAW-Image zu einem Input Tensor, welcher vom AI-Accelerator als Input Grösse entgegen genommen wird. Nach durchführen der Inferenz gelangen die Resultate, in diesem Fall der Output Tensor zum Processor des Host Systems. Gleichzeitig gelangt auch das Image auf das Host-System, um wenn nötig die Resultate anzuzeigen oder weiterverarbeitet zu werden. Die Bilder können wahlweise mit 10 FPS bei einer Auflösung von 4056x3040 oder bei 30 FPS mit 2028x1520 aufgenommen werden.
+Beim Sensor handelt es sich um einen Sony IMX500 Chip @noauthor_ai_nodate-1, welcher das Bild erfasst. Die Daten gelangen als RAW-Image zum ISP, einem kleinen Image Signal Processor. Dieser wandelt das RAW-Image zu einem Input Tensor, welcher vom AI-Accelerator als Input Grösse entgegen genommen wird. Nach durchführen der Inferenz gelangen die Resultate, in diesem Fall der Output Tensor zum Processor des Host Systems. Gleichzeitig gelangt auch das Image auf das Host-System, um wenn nötig die Resultate anzuzeigen oder weiterverarbeitet zu werden. Die Bilder können wahlweise mit 10 FPS bei einer Auflösung von 4056x3040 oder bei 30 FPS mit 2028x1520 aufgenommen werden.
+
+
+== Mitwelten Biodiversitäts Monitoring
+
+Biodiversität Monitoring befasst sich grundsätzlich mit dem Beobachten und Analysieren von Tier - und Pflanzenwelt.
+
+#quote(attribution:  <bdm_verlassliche_nodate>)["Die biologische Vielfalt bildet eine Lebensgrundlage der Schweiz. Deshalb ist es wichtig, ihren Zustand und ihre Entwicklung zu kennen."]
+Aus diesem Grund ist es von grosser Bedeutung die Umwelt zu beobachten und Veränderungen festzustellen. Um diese Arbeit zu vereinfachen, sind automatisierte Lösungen für ein Monitoring gefragt. 
+
+Ein System zur automatisierten Datenerfassung wurde im Rahmen des Projekts Mitwelten entwickelt @wullschleger_data_nodate @wullschleger_automated_nodate. Hierfür wurden verschiedene Sensoren zu einem IoT-Toolkit kombiniert. Dieses Toolkit ermöglicht es, Daten von dezentralen Systemen zu erfassen und an ein zentrales Backend weiterzuleiten.
+
+
+Das IoT-Toolkit umfasst unter anderem eine Kamera, die in regelmässigen Abständen Fotos von Blüten aufnimmt. Im Rahmen des Projekts wurden so insgesamt 1,5 Millionen Bilder generiert. @pollinator_cam zeigt eine im Feld aufgestellte IoT-Kamera.
+
+#figure(
+  image("../figures/pollinator_cam.jpg", width: 50%),
+  caption: [
+    IoT Kamera im Feld\
+    (Quelle: mitwelten.ch, aufgerufen am 23.01.2025)
+],
+)<pollinator_cam>
+
+Die enorme Menge an Bilddaten lässt sich nicht manuell analysieren. Deshalb entwickelte das Projekt-Team eine Machine-Learning-Pipeline, die Bestäuber automatisch erkennt.
+Die technische Architektur des Systems verbindet die Kamera mit einem leistungsstarken Backend. Die Kamera, bestehend aus einem Raspberry Pi und einer angeschlossenen Kameraeinheit, erfasst die Bilder und überträgt diese über einen Access Point an das Backend. Auf dem Backend Server läuft eine Machine Learning Pipeline, welche die empfangenen Bildern nach Bestäuber untersucht. 
+
+//Um bei der Entwicklung der Edge ML Kamera zielgerichtet arbeiten zu können, ist die Mitwelten Bestäuber Analyse das zu erfüllende Scenario. Durch die grosse Anzahl an verfügbaren und teilweise bereits gelabelten Bilder ist der Weg ein neues Modell zu trainieren geebnet. 
+
+=== Mitwelten Bestäuber Analyse <referenz_use_case>
+
+Die Bestäuber Detektion erfolgt in den folgenden Schritten. Ein Foto von mehreren Blüten, zum Beispiel von einem Blumentopf, durchläuft in einem ersten Schritt eine Machine Learning Analyse zur Detektion von Blüten. Die auf dem Bild detektierten Blüten werden anschliessen ausgeschnitten und somit zu einzelnen kleineren Bildern. Jedes dieser Bilder wird anschliessend mit einer weiteren Analyse und einem anderen Machine Learning Modell auf Bestäuber untersucht. Eine grosse Herausforderung in diesem Setup ist, dass die Anzahl Bestäuber-Erkennungen mit der Anzahl detektierten Blüten steigt. Dies kann bei grossen Blütenzahlen zu langen Analysen eines einzigen Bildes führen. Die folgende @mw_pipeline verdeutlicht den Prozess visuell.
+
+#figure(
+  image("../figures/mw_pipeline.png", width: 100%),
+  caption: [Vorgang Mitwelten Bestäuber Analyse \ 
+    (Quelle: Automated Analysis for Urban Biodiversity Monitoring, Timeo Wullschleger)
+],
+)<mw_pipeline>
+
+Um Bestäuber auf einer Blüte zu detektierten, ist ein Intervall von 15 Sekunden zur Erfassung von Bildern einzuhalten. Dies stellt die in etwa die Zeit dar, auf dem sich ein Bestäuber auf einer Blüte befindet.
+
+#TODO[15 Sekunden Intervall Quelle]
+
+=== Edge Architektur<mw_edge_architektur>
+
+Im Kontext dieser Entwicklung wurden verschiedene Architekturen untersucht @wullschleger_automated_nodate[p~58]. Unter anderem ein System, auf dem die Machine-Learning-Pipeline auf einem Raspberry Pi 3 ausgeführt wird. Der Edge-Computer analysiert die Bilder vor Ort und schickt nur die Resultate an das Backend. Die Problematik mit der steigenden Anzahl Inferenzen pro detektierten Blüte kommt aber in diesem Setup besonders zu tragen. Die @mw_analyse_rpi3 zeigt das Verhältnis der detektierten Blüten zur Analysezeit auf. 
+
+#figure(
+  image("../figures/mw_analyse_rpi3.png", width: 100%),
+  caption: [
+    Mitwelten Analyse auf Raspberry Pi 3\
+    (Quelle: Automated Analysis for Urban Biodiversity Monitoring S.61, Timeo Wullschleger)
+],
+)<mw_analyse_rpi3>
+
+Mit wachsender Anzahl Blüten auf dem Bild steigt die Zeit für die Bestäuber Analyse stark an. Da eine Kamera typischerweise immer die selben Blüten untersucht, würde ein solches Setup bei gleichbleibendem Bildintervall von 15 Sekunden immer mehr in Verzögerung geraten. Selbst wenn die Zeiten ohne Aufnahmen aufgrund schlechter Lichtverhältnisse für die Bildanalyse genutzt würden, bleibt diese Architektur in diesem Setup nicht realisierbar. Bei einem Bildintervall von 15s und 12h genügenden Lichtverhältnissen dürfte die Analyse maximal doppelt so lange, also 30 Sekunden für alle Blüten in Anspruch nehmen. Das Machine Learning Model wurde mit einer `max_detection` von 30 Blüten trainiert. Wie aus @mw_analyse_rpi3 ersichtlich, reicht die Zeit nicht, die Analyse auf der Kamera, also dem Raspberry Pi auszuführen.
+

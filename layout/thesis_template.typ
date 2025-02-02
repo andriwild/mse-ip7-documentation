@@ -62,7 +62,8 @@
   abstract(lang: "de")[#abstract_de]
 
   set page(
-    margin: (left: 30mm, right: 30mm, top: 40mm, bottom: 40mm),
+    margin: (left: 20mm, right: 20mm, top: 20mm, bottom: 20mm), // TODO
+    //margin: (left: 30mm, right: 30mm, top: 40mm, bottom: 40mm),
     numbering: "1",
     number-align: center,
   )
@@ -72,7 +73,8 @@
 
   set text(
     font: body-font, 
-    size: 11pt, 
+    size: 10pt,  // TODO
+    //size: 11pt, 
     lang: "de"
   )
   
