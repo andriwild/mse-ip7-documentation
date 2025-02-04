@@ -1,6 +1,6 @@
 // Enter your thesis data here:
 #let titleEnglish = "Edge ML Camera for Citizen Science"
-#let titleGerman = "Edge ML Kamera für Citizen Science"
+#let titleGerman = ""
 #let degree = "Master of Science in Engineering"
 #let program = ""
 #let supervisor = "Prof. Thomas Amberg"

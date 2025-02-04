@@ -35,7 +35,9 @@
   align(center, image("/figures/logo.jpg", width: 26%))
 
   v(5mm)
-  align(center, text(font: sans-font, 2em, weight: 700, "University of Applied Sciences and Arts Northwestern Switzerland FHNW"))
+  align(center, text(font: sans-font, 2.2em, weight: 700, "Fachhochschule Nordwestschweiz"))
+  align(center, text(font: sans-font, 2em, weight: 700, "Hochschule für Informatik"))
+  //align(center, text(font: sans-font, 2em, weight: 700, "University of Applied Sciences and Arts Northwestern Switzerland FHNW"))
 
   //v(5mm)
   //align(center, text(font: sans-font, 1.5em, weight: 100, "School of Computation, Information and Technology \n -- Informatics --"))
