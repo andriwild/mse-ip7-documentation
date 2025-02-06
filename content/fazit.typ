@@ -1,0 +1,6 @@
+#pagebreak()
+= Fazit
+
+Die vorliegende Arbeit zeigt, dass der technologische Fortschritt im Bereich Edge-Computing die dezentrale Verarbeitung von Machine-Learning-Modellen auf Edge ML Kameras realisierbar macht. Die durchgeführten Performance-Messungen verdeutlichen, dass moderne Hardware-Beschleuniger wie Hailo oder AI-Kameras signifikante Verbesserungen in der Inferenzgeschwindigkeit bei gleichzeitig reduziertem Energieverbrauch ermöglichen. Damit bietet sich eine vielversprechende Alternative zu klassischen Cloud-basierten Architekturen. Dies gilt besonders für Citizen-Science-Anwendungen im Biodiversitätsmonitoring, wie im SNF-Projekt Mitwelten verwendet. Ohne ein zentrales Backend kann ein geschlossenes System betrieben werden, wodurch der technische Aufwand reduziert werden kann.
+
+Die entwickelte Lösung für eine Edge ML Kamera basiert auf einer modularen Softwarearchitektur, die verschiedene Machine-Learning-Modelle unterstützt und eine einfache Anpassung für zukünftige Anwendungen im Bereich Citizen Science und Biodiversitätsforschung ermöglicht. Eine Portierung der bisherigen Mitwelten Bestäuberanalyse konnte auf der entwickelten Anwendung erfolgreich durchgeführt werden, wobei signifikante Verbesserungen der Analysegeschwindigkeit erzielt wurden.

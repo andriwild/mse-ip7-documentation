@@ -23,3 +23,4 @@
 #include "/content/analyse.typ"
 #include "/content/umsetzung.typ"
 #include "/content/validierung.typ"
+#include "/content/fazit.typ"

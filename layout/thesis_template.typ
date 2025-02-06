@@ -59,11 +59,11 @@
   print_page_break(print: is_print)
 
   abstract(lang: "en")[#abstract_en]
-  abstract(lang: "de")[#abstract_de]
+  //abstract(lang: "de")[#abstract_de]
 
   set page(
-    margin: (left: 15mm, right: 15mm, top: 15mm, bottom: 15mm), // TODO
-    //margin: (left: 30mm, right: 30mm, top: 40mm, bottom: 40mm),
+    //margin: (left: 15mm, right: 15mm, top: 15mm, bottom: 15mm), // TODO
+    margin: (left: 30mm, right: 30mm, top: 40mm, bottom: 40mm),
     numbering: "1",
     number-align: center,
   )
