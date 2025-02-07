@@ -9,13 +9,13 @@ Glossar
     [*Begriff*], [*Definition*],
   ),
   "AI", "Abkürzung für Artificial Intelligence (Künstliche Intelligenz).",
-  "Backend", "Serverseitiger Teil eines Systems, der Logik, Datenhaltung und Verarbeitung übernimmt.",
-  "Cloud", "Netzwerk von Remote-Servern, das zur Datenspeicherung und -verarbeitung über das Internet genutzt wird.",
-  "Deep Learning", "Teilgebiet des Machine Learning, das auf künstlichen neuronalen Netzen mit vielen Schichten basiert.",
-  "Edge", "Der Rand eines Netzwerks, an dem Daten erzeugt und häufig lokal verarbeitet werden.",
-  "Edge ML", "Ausführung von Machine Learning direkt am Netzwerkrand zur schnellen und lokalen Entscheidungsfindung.",
-  "IoT - Internet of Things", "Netzwerk physischer Objekte, die mittels Sensoren vernetzt sind, um Daten auszutauschen.",
-  "ML", "Abkürzung für Machine Learning, ein Bereich der KI, der auf der Erkennung von Mustern in Daten basiert.",
-  "ML Edge Kamera", "Kamera, die Machine Learning direkt an der Edge ausführt, um Echtzeit-Analysen vor Ort zu ermöglichen."
+  "Backend", "Serverseitiger Teil eines Systems",
+  "Deep Learning", "Teilgebiet des Machine Learning, das auf künstlichen neuronalen Netzen basiert",
+  "Edge", "Rand eines Netzwerks",
+  "Edge ML", "Ausführung von Machine Learning direkt am Netzwerkrand (Edge)",
+  "IoT","Internet of Things",
+  "ML", "Abkürzung für Machine Learning, ein Bereich der Künstlichen Intelligenz",
+  "ML Edge Kamera", "Kamera, die Machine Learning direkt an der Edge ausführt",
+  "TOPS", "Tera Operation per Second"
 )
 

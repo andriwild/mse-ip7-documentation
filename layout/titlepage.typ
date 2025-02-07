@@ -55,10 +55,9 @@
 
   let entries = ()
   entries.push(("Author: ", author))
-  entries.push(("Supervisor: ", supervisor))
   // Only show advisors if there are any
   if advisors.len() > 0 {
-    entries.push(("Advisors: ", advisors.join(", ")))
+    entries.push(("Advisor: ", advisors.join(", ")))
   }
   entries.push(("Start Date: ", startDate.display("[day].[month].[year]")))
   entries.push(("Submission Date: ", submissionDate.display("[day].[month].[year]")))

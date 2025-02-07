@@ -37,21 +37,14 @@
     titleGerman: titleGerman,
     degree: degree,
     program: program,
-    supervisor: supervisor,
     advisors: advisors,
     author: author,
     startDate: startDate,
     submissionDate: submissionDate
   )
 
-  print_page_break(print: is_print, to: "even")
+  // print_page_break(print: is_print, to: "even")
 
-  disclaimer(
-    title: title,
-    degree: degree,
-    author: author,
-    submissionDate: submissionDate
-  )
   //transparency_ai_tools_layout(transparency_ai_tools)
 
   //print_page_break(print: is_print)
@@ -110,6 +103,7 @@
   
   // --- Table of Contents ---
   outline(
+        depth: 3,
     title: {
       text(font: body-font, 1.5em, weight: 700, "Inhaltsverzeichnis")
       v(15mm)
@@ -144,10 +138,17 @@
   // )
 
   // Appendix.
-  pagebreak()
-  heading(numbering: none)[Appendix A: Supplementary Material]
-  include("/layout/appendix.typ")
+ // pagebreak()
+ // heading(numbering: none)[Appendix A: Supplementary Material]
+ // include("/layout/appendix.typ")
 
   pagebreak()
   bibliography("/thesis.bib")
+
+  disclaimer(
+    title: title,
+    degree: degree,
+    author: author,
+    submissionDate: submissionDate
+  )
 }

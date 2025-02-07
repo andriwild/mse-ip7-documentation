@@ -3,7 +3,7 @@
 
 = Analyse<analyse>
 Dieses Kapitel befasst sich mit der Analyse und Bewertung der Möglichkeiten für die Umsetzung einer Edge ML Kamera. Zuerst werden die Randbedingungen für das System eruiert, in dem die Zielgruppe und die Anforderungen erarbeitet werden.
-Das Unterkapitel Evaluation stellt anschliessend verschiedene Resultate zu Untersuchungen von ML Frameworks vor. Zum Abschluss dieses Kapitels werden verschiedene Möglichkeiten von Pipeline Setups vorgestellt.
+Das Kapitel Evaluation stellt anschliessend verschiedene Resultate zu Untersuchungen von ML Frameworks vor. Zum Abschluss dieses Kapitels werden verschiedene Möglichkeiten von Pipeline Setups vorgestellt.
 
 
 == Zielgruppe
@@ -15,10 +15,9 @@ Ein Edge ML Kamera, welche flexibel für verschiedene Zwecke einsetzbar ist, dec
 - Bildungseinrichtungen
 - Landwirtschaftliche Betriebe
 
-Die Bediener des Systems müssen die Edge ML Kamera in erster Linie für ihre Zwecke und Bedürfnisse anpassen können. Aus diesem Grund ist es von grosser Bedeutung, das System so einfach wie möglich zu halten. Da eine spezifische Analyse von Bildern mittels Machine Learning nicht generalisiert werden kann, müssen die Benutzer ihre eigene Implementierung in das System integrieren können. Ebenfalls muss die Erfassung von Bildern und die Destination der Analyseergebnisse flexibel gestaltet werden können. Beide Aspekte erfordern einen Eingriff in das System. Um diese Vorgänge zu vereinfachen, müssen diese anhand von Anleitungen und Beispielen unterstützt werden.
 
 == Use Cases 
-Durch die grosse Anzahl an verschiedenen Zielgruppen gibt es auch viele verschiedene Szenarien, in dem der Einsatz einer Edge ML Kamera vorstellbar ist.
+Anhand der Zielgruppen gibt es verschiedene Szenarien, in dem der Einsatz einer Edge ML Kamera Anwendung findet. Die folgenden Szenarien wurden identifiziert:
 
 - Biodiversitätsforschung: Überwachung von Bestäubern, Vögeln, Säugetieren oder Pflanzenwachstum.
 - Artenschutz: Identifikation und Überwachung gefährdeter Tier- oder Pflanzenarten.
@@ -43,24 +42,25 @@ Die folgenden funktionalen Anforderungen an eine Edge ML Kamera wurden identifiz
 
 === Nicht Funktionale
 Die folgenden nicht funktionalen Anforderungen an eine Edge ML Kamera wurden identifiziert:
-- Analysedauer: Im Mitwelten Projekt ist definiert, dass die Analyse von Bestäubern in 15 Sekunden erfolgen muss @wullschleger_automated_nodate[p~62]. Die Zeit ist von der Verweildauer von Bestäuber auf einer Blume limitiert.
+- Analyse-Intervall: Aus dem Vorprojekt @wullschleger_automated_nodate[p~62] geht hervor, dass die Bestäuberanalyse in einem Intervall von 15 Sekunden erfolgen sollte, um die Detektions-Change zu maximieren.
 - Betrieb: Das System muss zuverlässig im Dauerbetrieb funktionieren.
-- Kosten: Der Preis für das Gesamtsystem muss so tief sein, dass Citizen Science Projekte realistisch sind
+- Kosten: Der Preis für das Gesamtsystem muss so tief sein, dass Citizen Science Projekte realistisch sind.
+- Adaption: Die Bediener des Systems müssen die Edge ML Kamera in erster Linie für ihre Zwecke und Bedürfnisse anpassen können. Aus diesem Grund ist es wichtig, das System so einfach wie möglich zu halten. Da eine spezifische Analyse von Bildern mittels Machine Learning nicht generalisiert werden kann, müssen die Benutzer ihre eigene Implementierung in das System integrieren können. Ebenfalls muss die Erfassung von Bildern und die Verarbeitung der Analyseergebnisse flexibel gestaltet werden können. Beide Aspekte erfordern einen Eingriff in das System. Um diese Vorgänge zu vereinfachen, müssen diese anhand von Anleitungen und Beispielen unterstützt werden.
 
 == Evaluation
 Im Folgenden werden Resultate der Untersuchungen bezüglich ML Frameworks und Hardware aufgezeigt. Dabei sind Inferenzen mit PyTorch, Tensorflow lite, ONNX, NCNN und Hailo Modellen implementiert worden. Die Inferenzen wurden auf Raspberry Pi's mit und ohne Beschleuniger Hardware ausgeführt und gemessen. Um die Resultate miteinander zu vergleichen und anhand von Grafiken zu untersuchen, wurde ein Dashboard entwickelt @noauthor_ip7-ml-model-evaldashboard_nodate. Das Dashboard basiert auf CSV-Daten, welche Test-Skripts zur Messung von Inferenzzeiten automatisch generieren. Für jedes Framework existiert ein separates Skript, welches ein Framework auf einer spezifischen Hardware mit variabler Anzahl Bilder ausführt. Die folgende @dashboard_screenshot zeigt den Startscreen der Applikation.
 
 #figure(
   image("../figures/dashboard_screenshot.png", width: 100%),
-  caption: [ML Exploration Dashboard\
+  caption: [Model Evaluation Dashboard\
     (Quelle: Screenshot eigene Entwicklung, Andri Wild, 2025)
 ],
 )<dashboard_screenshot>
 
-Im Repository @awild_andriwildip7-ml-model-eval_2024 befinden sich nebst dem Dashboard auch die Skripts zur Messung der Inferenzzeiten. Je nach Test muss die entsprechende Hardware an das System angeschlossen sein.
+Im Repository @awild_andriwildip7-ml-model-eval_2024 befinden sich nebst dem Dashboard auch die Skripts zur Messung der Inferenzzeiten. Je nach Test muss die entsprechende Hardware an das System angeschlossen sein. Aufgrund Schwierigkeiten mit dem BeagleY-AI wurden keine Resultate dieses Boards zur Evaluation beigezogen.
 
 === Methodik
-Bei allen verwendeten Modellen handelt es sich um Yolo-Modelle verschiedener Generationen und Grösse. Die Modelle zur Bestäuberanalyse aus @referenz_use_case sind ebenfalls Yolo-Modelle der Generation 5. Inzwischen sind die Modelle weiterentwickelt worden. Während dieser Arbeit wurde die 11. Generation veröffentlicht. Verglichen wurden die Generationen 5 und 8 um festzustellen, wie sich die Metriken über die Generationen verhalten. Die Modelle stammen von Ultralytics @jocher_ultralytics_2023 und haben eine Input-Grösse von 640x640 Pixel. Die Inferenzen wurden jeweils auf dem COCO: Common Object in Context @lin_microsoft_2015 Datensatz durchgeführt. Dies ist der state-of-the-art-Bilderdatensatz, um einheitliche Metriken für Machine Learning Tasks zu bestimmen. Der Fokus in den folgenden Analysen liegt auf den Inferenzzeiten, wobei die Genauigkeit eine sekundäre Rolle spielt. Die verwendeten Yolo-Modelle haben alle publizierte Metriken auf dem COCO-Datenset @hussain_yolov5_2024.
+Bei allen verwendeten Modellen handelt es sich um Yolo-Modelle verschiedener Generationen und Grösse. Die Modelle zur Bestäuberanalyse aus @referenz_use_case sind ebenfalls Yolo-Modelle der Generation 5. Inzwischen sind die Modelle weiterentwickelt worden. Während dieser Arbeit wurde die 11. Generation veröffentlicht. Verglichen wurden die Generationen 5 und 8 um festzustellen, wie sich die Metriken über die Generationen verhalten. Die Modelle stammen von Ultralytics @jocher_ultralytics_2023 und haben eine Input-Grösse von 640x640 Pixel. Die Inferenzen wurden jeweils auf dem COCO: Common Object in Context @lin_microsoft_2015 Datensatz durchgeführt. Dies ist der state-of-the-art-Bilderdatensatz, um einheitliche Metriken für Machine Learning Tasks zu generieren. Der Fokus in den folgenden Analysen liegt auf den Inferenzzeiten, wobei die Genauigkeit eine sekundäre Rolle spielt. Die verwendeten Yolo-Modelle haben publizierte Metriken auf dem COCO-Datenset @hussain_yolov5_2024.
 
 === ML Framework 
 
@@ -140,7 +140,7 @@ Ebenso ist ersichtlich, dass sich die doppelte Anzahl TOPS direkt auf die Infere
 Die schnellste Inferenz wird somit mit dem Hailo8-Beschleuniger erzielt und beträgt rund 15 ms.
 
 == Edge ML Setups
-Aus der Selektion der Hardware und den in diesem Kapitel aufgeführten Evaluationen von Inferenzen lassen sich nun verschiedene Konstellationen mit unterschiedlichen Stärken, resp. Schwächen definieren. Die @comp_cost_speed zeigt das Verhältnis von Kosten zu Inferenzgeschwindigkeit der vielversprechendsten Kombinationen mit dem YOLOv8n-Model.
+Aus der Selektion der Hardware und den in diesem Kapitel aufgeführten Evaluationen von Inferenzen lassen sich nun verschiedene Konstellationen mit unterschiedlichen Stärken, resp. Schwächen definieren. Die @comp_cost_speed zeigt das Verhältnis von Kosten zu Inferenzgeschwindigkeit der vielversprechendsten Kombinationen mit dem YOLOv8n-Model. Die Setups sind jeweils ohne Kamera kalkuliert, was beim Vergleich mit der AI-Kamera berücksichtigt werden muss.
 
 #figure(
   image("../figures/cost_speed_tradeoff.png", width: 100%),
@@ -158,4 +158,4 @@ Bei den Setups mit Beschleuniger sehen wir, dass mit höheren Ausgaben entsprech
 
 Um auf dem Raspberry Pi die beste Performance zu erzielen, empfiehlt sich ein Chip von Hailo. Eine Edge-TPU von Google ist aufgrund des abnehmenden Supports und der weniger ausführlichen Dokumentation nicht empfehlenswert.
 
-Lässt es die Applikation zu, ist auch die AI-Kamera von Raspberry Pi eine gute Wahl. Dabei muss berücksichtigt werden, dass in Systemen mit mehr als einer Inferenz nur die erste auf der Kamera durchgeführt werden kann. Darauffolgende Inferenzen müssten auf der CPU oder auf einem weiteren Beschleuniger ausgeführt werden. Ein Setup mit einem weiteren Beschleuniger würde natürlich auch die Kosten erhöhen.
+Lässt es die Applikation zu, ist auch die AI-Kamera von Raspberry Pi eine gute Wahl. Dabei muss berücksichtigt werden, dass in Systemen mit mehr als einer Inferenz nur die erste auf der Kamera durchgeführt werden kann. Darauffolgende Inferenzen müssten auf der CPU oder auf einem weiteren Beschleuniger ausgeführt werden. Ein Setup mit einem weiteren Beschleuniger würde natürlich auch die Kosten deutlich erhöhen.
