@@ -24,7 +24,7 @@
   
   // --- Disclaimer ---  
   v(75%)
-  text("I confirm that this " + degree + "’s thesis is my own work and I have documented all sources and material used.")
+  text("Hiermit bestätige ich, dass die eingereichte Projektarbeit mit dem Titel «Edge ML Camera for Citizen Sciene» das Resultat meiner persönlichen Erarbeitung der Themen ist. Ich habe keine anderen als die angegebenen Quellen benutzt.")
 
   v(15mm)
   grid(

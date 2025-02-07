@@ -136,12 +136,12 @@
   )
 
   // List of tables.
-  pagebreak()
-  heading(numbering: none)[Tabellenverzeichnis]
-  outline(
-    title: "",
-    target: figure.where(kind: table)
-  )
+  // pagebreak()
+  // heading(numbering: none)[Tabellenverzeichnis]
+  // outline(
+  //   title: "",
+  //   target: figure.where(kind: table)
+  // )
 
   // Appendix.
   pagebreak()

@@ -16,7 +16,6 @@ Damit das System für Citizen Science geeignet ist, muss es self-contained und f
 === Komponentendiagramm
 Die folgende @pipeline_komponenten zeigt eine Übersicht des Systems. Eine `Source` repräsentiert die Quelle eines Bildes, wie zum Beispiel eine Kamera. Als Buffer zwischen der Analyse und der Source dient eine `Queue`. Bei der Operation handelt es sich um die Komponente der Analyse. Dies kann eine Machine Learning Inferenz sein oder eine andere Operation, die ein Bild verarbeitet und ein Resultat generiert. Anschliessend gelangt der Output der Operation in eine oder mehrere `Sinks`. Die Sink verarbeitet die Daten weiter, sodass sie den Anforderungen des Projekts entsprechen. Beispielsweise können die Ergebnisse per HTTP-Request gesendet oder in einer Datenbank gespeichert werden.
 
-#TODO[Frames weglassen]
 #figure(
   image("../figures/pipeline_komponenten.png", width: 100%),
   caption: [Pipeline Komponenten\
@@ -149,10 +148,10 @@ Die Pipeline ist dafür verantwortlich, dass ein Thread zur Erfassung von Bilder
 )<sequentdiagram_pipeline>
 
 
-== Prototypen: verschiedene System Setups 
+== Prototypen<prototypen>
 In diesem Kapitel werden zwei unterschiedliche Prototypen vorgestellt, die verschiedene System-Setups für die Anwendung der entwickelten Applikation demonstrieren. Beide Prototypen setzen Machine Learning auf dem Raspberry Pi 5 ein, unterscheiden sich jedoch in ihrer verwendeten Hardware und Konfiguration. Durch den Vergleich dieser Setups lassen sich die Vor- und Nachteile verschiedener Ansätze analysieren und bewerten. 
 
-=== Prototyp 1 - Mitwelten Analyse<prototyp_1>
+=== Mitwelten Analyse<prototyp_1>
 
 Dieser Prototyp setzt den Referenz-Use-Case aus @referenz_use_case mit verschiedenen Modellen um.
 Die Analysen wurden jeweils mit Testbildern durchgeführt, daher ist der Energieverbrauch ohne Kamera zu betrachten.
@@ -225,7 +224,7 @@ Das Training der Modelle lag an dieser Stelle nicht im Fokus, daher weisen diese
 Die Untersuchung der Inferenzzeiten für die Bestäuberanalyse zeigt beeindruckende Resultate. Auch mit vielen Blüten ist die Performance sehr gut. Die Gesamtzeit der Inferenz von 13 Blüten dauert rund 20 Millisekunden.
 Des Weiteren ist auch der Energiebedarf bei rund 5 Watt, was der Hälfte der CPU-betriebenen Pipelines entspricht. Die Gesamtauslastung der CPU ist durch die Auslagerung allgemein sehr tief, so dass diese von 2,5 GHz auf 1,7 GHz gedrosselt wird.
 
-=== Prototyp 2 - AI-Camera
+=== AI-Camera
 Der zweite Prototyp verwendet die AI-Camera. Um eigens trainierte Modelle auf der AI-Camera auszuführen, müssen diese für den Sony IMX500-Chip konvertiert werden @noauthor_imx500_nodate. Dieser Prozess ist nicht trivial und konnte im Kontext dieser Arbeit nicht mehr erarbeitet werden.
 Trotzdem soll an dieser Stelle ein Use Case mit dieser Hardware vorgestellt werden.
 Eine besondere Eigenschaft der AI-Camera ist, dass diese zugleich mit dem Bild die Inferenzresultate liefert. Dies hat zur Folge, dass das Host-System praktisch unbelastet ist. Dies ermöglicht das Abarbeiten von anderen Tasks durch die freie Rechenleistung oder das Verwenden von weniger leistungsfähiger Hardware.
@@ -259,6 +258,21 @@ Durch die Modularität der Applikation erhält hier die AI-Kamera eine Doppelrol
 
 #TODO[Cache, Singleton nicht möglich]
 
-== Erweiterung und Adaptierung der Anwendung
+
+== Versuchsaufbau und Temperaturentwicklung
+Besonders hervorzuheben ist der Einsatz von Beschleunigern, wie etwa den Komponenten von Hailo, die nicht nur für schnellere Inferenzzeiten sorgen, sondern auch die Wärmeentwicklung signifikant reduzieren. Die @versuchsaufbau_temp zeigt einen einfachen Versuchsaufbau, um die Temperaturentwicklung in einem Gehäuse zu untersuchen. Während das Gehäuse bei Einsatz der Hailo-Inferenz konstant auf einem niedrigen Temperaturniveau bleibt, führt die CPU-Inferenz zu einem rapiden Temperaturanstieg. 
+
+#figure(
+  image("../figures/versuchsaufbau_temp.jpg", width: 40%),
+    caption: [Versuchsaufbau Temperatur Messung\
+    (Quelle: Eigene Aufnahme, Andri Wild, 2025)
+]
+)<versuchsaufbau_temp>
+
+Mit der CPU betriebenen Inferenz erhöhte sich die Temperatur im geschlossenen Gehäuse innerhalb einer Stunde auf 40 Grad, steigend. Die CPU-Temperatur lag bei ca. 85 Grad, womit die Drosselung aktiviert wird und die Rechenleistung sinkt.
+
+Die optimierte Energieeffizienz der Beschleuniger hat positive Auswirkungen auf das Gehäusedesign – insbesondere bei Anwendungen wie Biodiversitätsanalysen, bei denen das Gerät oft im Freien und in wasserdichten Gehäusen eingesetzt wird. Der Wegfall von aktiver Belüftung eröffnet hier wesentliche Konstruktionsvorteile.
+
+== Erweiterung und Adaptierung der Edge ML Kamera
 Die Installation der Anwendung ist im `README.md` des Github-Repository ausführlich beschrieben und dient als Anleitung für die Inbetriebnahme.
 In der Anleitung werden auch die wichtigsten Schritte zur Erweiterung des Systems aufgeführt. Zudem bestehen für die auswechselbaren Komponenten Beispielimplementierungen. Um die Entwicklung zu vereinfachen, findet man im Utitlity-Ordner einige Helferfunktionen.

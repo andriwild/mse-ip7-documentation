@@ -87,7 +87,7 @@ Ultralytics @ultralytics_home_nodate ist ein auf PyTorch basierendes Open-Source
 - Nachteile: Die Flexibilität ist im Vergleich zu anderen Frameworks eingeschränkt. Zudem verwendet Ultralytics eine AGPL-3.0-Lizenz, was bei der Open-Source Community nicht gut ankommt.
 
 === Anatomie von Machine Learning Modellen
-Ein Machine-Learning-Modell besteht aus einer Architektur, die dessen Aufbau und Funktionsweise definiert, und einem Satz von Parametern, die während des Trainings optimiert werden. Die Architektur eines Modells legt grundlegende Eigenschaften fest, wie die Struktur der Neuronen und Layer, die Verbindungen zwischen ihnen sowie Eingabe- und Ausgabetensoren. Die Eingabetensoren bestimmen, welche Form und Dimensionen die Daten haben müssen (z. B. die Größe von Bildern), während die Ausgabetensoren das Ergebnis des Modells beschreiben, etwa Koordinaten für erkannte Objekte.
+Ein Machine-Learning-Modell besteht aus einer Architektur, die dessen Aufbau und Funktionsweise definiert, und einem Satz von Parametern, die während des Trainings optimiert werden. Die Architektur eines Modells legt grundlegende Eigenschaften fest, wie die Struktur der Neuronen und Layer, die Verbindungen zwischen ihnen sowie Eingabe- und Ausgabetensoren. Die Eingabetensoren bestimmen, welche Form und Dimensionen die Daten haben müssen (z. B. die Grösse von Bildern), während die Ausgabetensoren das Ergebnis des Modells beschreiben, etwa Koordinaten für erkannte Objekte.
 
 Es gibt verschiedene Typen von Machine-Learning-Modellen, die je nach Anwendungsfall eingesetzt werden. Zu den wichtigsten gehören Modelle für Objekterkennung, die Objekte in einem Bild lokalisieren und klassifizieren, Bildsegmentierung, die jedem Pixel eines Bildes eine Klasse zuordnet, und Posenschätzung, die die Körperhaltung von Personen oder Tieren analysiert. Die folgende @ml_tasks zeigt eine Visualisierung der verschiedenen Disziplinen.
 #figure(
@@ -122,7 +122,6 @@ Das Training eines Modells umfasst die Anpassung der Parameter auf Basis eines g
 
 Ein Modell hat definierte Input und Output Tensoren. Das heisst, dass die Daten für das Training und die Inferenz dem Input Tensor entsprechen müssen. Diesen Vorgang nennt man preprocessing. Arbeitet das Modell mit Bildern beinhaltet dieser Schritt das modifizieren des Bildes auf die Input Grösse des Modells. Ebenso variiert der Output Tensor je nach Modell und Framework. Die Output Daten im Falle von Object Detection beschreiben dabei den Ort des Objekts und die Confidence, also wie sicher sich das Modell ist, dass dieses Objekt zu einer bestimmten Klasse gehört. 
 Je nach Datenformat müssen die Ergebnisse konvertiert und nach Bedarf der Anwendung unter Berücksichtigung des Preprocessing auf das Originalbild zurückgerechnet werden. Dieser Prozess wird als Postprocessing bezeichnet.
-#TODO[Quelle]
 
 === Geschwindigkeit einer Inferenz
 
